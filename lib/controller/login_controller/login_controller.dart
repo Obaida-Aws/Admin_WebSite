@@ -8,7 +8,7 @@ import 'package:get_storage/get_storage.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:async';
-import 'package:get_ip_address/get_ip_address.dart';
+
 
 
 abstract class LoginController extends GetxController {
@@ -37,7 +37,7 @@ class LoginControllerImp extends LoginController {
   }
   @override
   Future postLogin(email, password) async {
-    var ipAddress = IpAddress(type: RequestType.text);
+    var ipAddress;
     dynamic ip = await ipAddress.getIpAddress();
     print(ip);
     print(";;;;;;;;;;;;;;;;;");
@@ -46,7 +46,7 @@ class LoginControllerImp extends LoginController {
         body: jsonEncode({
           "email": email.trim(),
           "password": password.trim(),
-          "ipAddress": ip,
+        //  "ipAddress": ip,
         }),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
