@@ -1,9 +1,10 @@
+import 'package:adminsite/controller/homescreen_controller/Users_controller.dart';
 import 'package:adminsite/controller/homescreen_controller/homescreen_controller.dart';
 import 'package:adminsite/view/homescreen/Posts.dart';
 import 'package:adminsite/view/homescreen/Users.dart';
-import 'package:adminsite/view/homescreen/comments.dart';
+import 'package:adminsite/view/homescreen/Fields.dart';
 import 'package:adminsite/view/homescreen/dashboards.dart';
-import 'package:adminsite/view/homescreen/likes.dart';
+import 'package:adminsite/view/homescreen/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String selectedMenuItem = 'Dashboard';
   HomeScreenController controller = Get.put(HomeScreenController());
+  UsersController userController = Get.put(UsersController());
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 buildMenuItem('Dashboard', Icons.dashboard),
                 buildMenuItem('Users', Icons.people),
                 buildMenuItem('Posts', Icons.post_add),
-                buildMenuItem('Comments', Icons.comment),
-                buildMenuItem('Likes', Icons.thumb_up),
+                buildMenuItem('Fields', Icons.task),
+                buildMenuItem('Pages', Icons.pages),
               ],
             ),
           ),
@@ -118,15 +120,25 @@ Widget buildContent() {
   switch (selectedMenuItem) {
     case 'Dashboard':
     controller.goToDashboard();
-      return DashboardContent(initialDashboardData: controller.dashboardData,);
+      return DashboardContent();
     case 'Users':
-      return User();
+    userController.goUser();
+      return 
+      Container(
+         height: 500,
+        child: User());
     case 'Posts':
-      return PostsContent();
-    case 'Comments':
-      return CommentsContent();
-    case 'Likes':
-      return LikesContent();
+      return Container(
+        height: 500,
+        child: PostsContent());
+    case 'Fields':
+      return Container(
+        height: 500,
+        child: Fields());
+    case 'Pages':
+      return Container(
+        height: 500,
+        child: Pages());
     default:
       return Text('No content available');
   }

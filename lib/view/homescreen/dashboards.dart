@@ -5,9 +5,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class DashboardContent extends StatefulWidget {
 
-    final Map<String, dynamic> initialDashboardData;
 
-  DashboardContent({required this.initialDashboardData});
   @override
   _DashboardContentState createState() => _DashboardContentState();
 }
