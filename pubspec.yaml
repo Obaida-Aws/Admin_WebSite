@@ -39,6 +39,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  get: ^4.6.6
+  http: ^1.1.0
+  get_storage: ^2.1.1
+  get_ip_address: ^0.0.6
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
