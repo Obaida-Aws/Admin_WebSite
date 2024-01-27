@@ -51,7 +51,11 @@ dependencies:
   universal_io: ^2.2.2
   syncfusion_flutter_calendar: ^24.1.47
   awesome_notifications: ^0.8.2
+  percent_indicator: ^3.4.0
   table_calendar: ^3.0.9
+  flutter_svg: ^0.22.0
+  fl_chart: ^0.36.1
+  provider: ^5.0.0
   video_player: ^2.8.1
   peerdart: ^0.5.4
   audioplayers: ^5.2.1

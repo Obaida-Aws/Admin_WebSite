@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:adminsite/view/homescreen/homescreen.dart';
 import 'package:adminsite/view/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
      ),
       ),
       debugShowCheckedModeBanner: false,
-      home:Login()
+      home:HomeScreen()
       
    //   routes: routes,
     );
