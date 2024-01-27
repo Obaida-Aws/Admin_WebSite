@@ -41,6 +41,7 @@ dependencies:
   get_storage: ^2.1.1
   image_picker: ^1.0.7
   file_picker: ^6.1.1
+  get_ip_address: ^0.0.6
   dio: ^5.3.3
   flutter_file_downloader: ^1.1.4
   url_launcher: ^6.2.1

@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:adminsite/global.dart';
+import 'package:adminsite/view/homescreen/homescreen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_ip_address/get_ip_address.dart';
 
 import 'package:get_storage/get_storage.dart';
 
@@ -37,16 +39,16 @@ class LoginControllerImp extends LoginController {
   }
   @override
   Future postLogin(email, password) async {
-    var ipAddress;
+    var ipAddress = IpAddress(type: RequestType.text);
     dynamic ip = await ipAddress.getIpAddress();
     print(ip);
     print(";;;;;;;;;;;;;;;;;");
-    var url = "$urlStarter/user/Login";
+    var url = "$urlStarter/admin/login";
     var responce = await http.post(Uri.parse(url),
         body: jsonEncode({
           "email": email.trim(),
           "password": password.trim(),
-        //  "ipAddress": ip,
+          "ipAddress": ip,
         }),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -66,16 +68,19 @@ class LoginControllerImp extends LoginController {
       } else if (res.statusCode == 200) {
         resbody['message'] = "";
         print(resbody['accessToken']);
-       /* GetStorage().write("accessToken", resbody['accessToken']);
+        print("awssss");
+        print(resbody['username']);
+        GetStorage().write("accessToken", resbody['accessToken']);
         GetStorage().write("refreshToken", resbody['refreshToken']);
         GetStorage().write("loginemail", email);
         GetStorage().write("username", resbody['username']);
         GetStorage().write("firstname", resbody['firstname']);
         GetStorage().write("lastname", resbody['lastname']);
-        GetStorage().write("photo", resbody['photo']);*/
+        GetStorage().write("photo", resbody['photo']);
         //await connectToSSE(resbody['username']);
 
        // Get.offNamed(AppRoute.homescreen);
+       Get.to(HomeScreen());
       }
     } catch (err) {
       print(err);

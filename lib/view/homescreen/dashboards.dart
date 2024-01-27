@@ -1,12 +1,20 @@
+import 'package:adminsite/controller/homescreen_controller/homescreen_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class DashboardContent extends StatefulWidget {
+
+    final Map<String, dynamic> initialDashboardData;
+
+  DashboardContent({required this.initialDashboardData});
   @override
   _DashboardContentState createState() => _DashboardContentState();
 }
 
 class _DashboardContentState extends State<DashboardContent> {
+  HomeScreenController controller = Get.put(HomeScreenController());
+
   final Map<String, dynamic> dashboardData = {
     'Users': 100,
     'Active Users': 75,
@@ -18,9 +26,19 @@ class _DashboardContentState extends State<DashboardContent> {
     'Messages': 120,
     'Posts': 80,
   };
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller.goToDashboard();
+       print("aaaaaaaaaaa");
+    print(controller.dashboardData);
+  }
+
 
   @override
   Widget build(BuildContext context) {
+ 
     int maxValue =
         dashboardData.values.reduce((value, element) => value > element ? value : element);
 
@@ -51,6 +69,8 @@ class CounterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+
     double percentage = value / maxValue;
 
     // Ensure the percentage is capped between 0.0 and 1.0

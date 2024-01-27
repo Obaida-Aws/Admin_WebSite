@@ -7,8 +7,8 @@ import 'package:growify/core/constant/routes.dart';
 import 'package:http/http.dart' as http;
 import 'package:growify/controller/home/logOutButton_controller.dart';*/
 
-var urlStarter = "http://192.168.88.15:3000";
-var urlSSEStarter = "http://192.168.88.15:4000";
+var urlStarter = "http://192.168.88.13:3000";
+var urlSSEStarter = "http://192.168.88.13:4000";
 dynamic incomingSDPOffer;
 //flutter run -d emulator-5556
 String? firstName;
@@ -22,7 +22,7 @@ String? code;
 /*LogOutButtonControllerImp _logoutController =
     Get.put(LogOutButtonControllerImp());*/
 getRefreshToken(refreshToken) async {
-  var url = "$urlStarter/user/token";
+  var url = "$urlStarter/admin/token";
   var responce = await http.post(Uri.parse(url), headers: {
     'Content-type': 'application/json; charset=UTF-8',
     'Authorization': 'bearer ' + refreshToken ?? "",

@@ -1,9 +1,11 @@
+import 'package:adminsite/controller/homescreen_controller/homescreen_controller.dart';
 import 'package:adminsite/view/homescreen/Posts.dart';
 import 'package:adminsite/view/homescreen/Users.dart';
 import 'package:adminsite/view/homescreen/comments.dart';
 import 'package:adminsite/view/homescreen/dashboards.dart';
 import 'package:adminsite/view/homescreen/likes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String selectedMenuItem = 'Dashboard';
+  HomeScreenController controller = Get.put(HomeScreenController());
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +117,8 @@ class _HomeScreenState extends State<HomeScreen> {
 Widget buildContent() {
   switch (selectedMenuItem) {
     case 'Dashboard':
-      return DashboardContent();
+    controller.goToDashboard();
+      return DashboardContent(initialDashboardData: controller.dashboardData,);
     case 'Users':
       return User();
     case 'Posts':
