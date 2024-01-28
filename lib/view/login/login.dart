@@ -123,14 +123,7 @@ class Login extends StatelessWidget {
                                 }
                               },
                             ),
-                            const SizedBox(height: 30),
-                            SignUporSignIn(
-                              textOne: "Don't have an account ? ",
-                              textTwo: "Sign Up",
-                              onTap: () {
-                                controller.goToSignup();
-                              },
-                            ),
+                          
                           ],
                         ),
                       ),
@@ -221,15 +214,7 @@ class Login extends StatelessWidget {
                     const SizedBox(
                       height: 15,
                     ),
-                    InkWell(
-                      onTap: () {
-                        controller.goToForgetPassword();
-                      },
-                      child: const Text(
-                        "Forget Password",
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
+                   
                     ButtonAuth(
                       text: "Sign In",
                       onPressed: () async {

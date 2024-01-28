@@ -1,6 +1,10 @@
 import 'package:adminsite/controller/homescreen_controller/Users_controller.dart';
 import 'package:adminsite/controller/homescreen_controller/homescreen_controller.dart';
 import 'package:adminsite/view/homescreen/Posts.dart';
+import 'package:adminsite/view/homescreen/Reportpages/ReportComments.dart';
+import 'package:adminsite/view/homescreen/Reportpages/ReportPages.dart';
+import 'package:adminsite/view/homescreen/Reportpages/ReportUsers.dart';
+import 'package:adminsite/view/homescreen/Reportpages/RepostPosts.dart';
 import 'package:adminsite/view/homescreen/Users.dart';
 import 'package:adminsite/view/homescreen/Fields.dart';
 import 'package:adminsite/view/homescreen/dashboards.dart';
@@ -25,38 +29,51 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           // Vertical Bar with IconButtons and Text Labels
           Container(
-            width: 140, // Adjust the width as needed
+            width: 175, // Adjust the width as needed
             color: Colors.deepPurple,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Move the CircleAvatar and Text to the top
-                Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage('images/coverImage.jpg'), // Replace with your image asset
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Move the CircleAvatar and Text to the top
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: AssetImage('images/coverImage.jpg'), // Replace with your image asset
+                    ),
                   ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Your Name',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                  SizedBox(height: 16),
+                  Text(
+                    'Your Name',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                SizedBox(height: 24), // Add some spacing
-
-                // Menu items
-                buildMenuItem('Dashboard', Icons.dashboard),
-                buildMenuItem('Users', Icons.people),
-                buildMenuItem('Posts', Icons.post_add),
-                buildMenuItem('Fields', Icons.task),
-                buildMenuItem('Pages', Icons.pages),
-              ],
+                  SizedBox(height: 24), // Add some spacing
+              
+                  // Menu items
+                  buildMenuItem('Dashboard', Icons.dashboard),
+                  buildMenuItem('Users', Icons.people),
+                  buildMenuItem('Posts', Icons.post_add),
+                  buildMenuItem('Fields', Icons.task),
+                  buildMenuItem('Pages', Icons.pages),
+                  buildMenuItem('Temp Users', Icons.pages),
+                  buildMenuItem('Active Users', Icons.pages),
+                  buildMenuItem('Comments', Icons.pages),
+                  buildMenuItem('Likes', Icons.pages),
+                  buildMenuItem('Groups', Icons.pages),
+                  buildMenuItem('Jobs', Icons.pages),
+                  buildMenuItem('Reports Comments', Icons.report),
+                  buildMenuItem('Reports Posts', Icons.report),
+                  buildMenuItem('Reports Users', Icons.report),
+                  buildMenuItem('Reports Pages', Icons.report),
+                  
+                ],
+              ),
             ),
           ),
 
@@ -119,10 +136,10 @@ class _HomeScreenState extends State<HomeScreen> {
 Widget buildContent() {
   switch (selectedMenuItem) {
     case 'Dashboard':
-    controller.goToDashboard();
+   // controller.goToDashboard();
       return DashboardContent();
     case 'Users':
-    userController.goUser();
+    
       return 
       Container(
          height: 500,
@@ -139,6 +156,22 @@ Widget buildContent() {
       return Container(
         height: 500,
         child: Pages());
+    case 'Reports Comments':
+      return Container(
+        height: 500,
+        child: ReportComments());
+    case 'Reports Posts':
+      return Container(
+        height: 500,
+        child: ReportPosts());
+    case 'Reports Users':
+      return Container(
+        height: 500,
+        child: ReportUsers());
+  case 'Reports Pages':
+      return Container(
+        height: 500,
+        child: ReportPages());
     default:
       return Text('No content available');
   }

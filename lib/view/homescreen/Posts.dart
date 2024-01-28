@@ -1,4 +1,6 @@
+import 'package:adminsite/controller/homescreen_controller/posts_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class PostsContent extends StatefulWidget {
@@ -28,6 +30,14 @@ class _PostsContentState extends State<PostsContent> {
     },
     // Add more posts as needed
   ];
+  PostsController postController = Get.put(PostsController());
+
+  @override
+  void initState() {
+    super.initState();
+    postController.goPosts();
+
+  }
 
   @override
   Widget build(BuildContext context) {

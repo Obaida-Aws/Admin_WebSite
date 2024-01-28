@@ -5,13 +5,13 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
-class UsersController extends GetxController {
+class PostsController extends GetxController {
 
   List<Map<String, String>> userData = [
   
   ];
-   getUser() async {
-    var url = "$urlStarter/admin/user";
+   getPost() async {
+    var url = "$urlStarter/admin/posts";
     var responce = await http.get(Uri.parse(url), headers: {
       'Content-type': 'application/json; charset=UTF-8',
       'Authorization': 'bearer ' + GetStorage().read('accessToken'),
@@ -20,11 +20,15 @@ class UsersController extends GetxController {
     return responce;
   }
 
-  goUser() async {
-    var res = await getUser();
+  goPosts() async {
+   
+
+    var res = await getPost();
+     print("ggggggggg");
+     print(res.statusCode);
     if (res.statusCode == 403) {
       await getRefreshToken(GetStorage().read('refreshToken'));
-      goUser();
+      goPosts();
       return;
     } else if (res.statusCode == 401) {
      // _logoutController.goTosigninpage();
@@ -34,10 +38,12 @@ class UsersController extends GetxController {
       return resbody['message'];
     } else if (res.statusCode == 200) {
       var responseBody = jsonDecode(res.body);
+      print("hhhhhhhhhhhhhhhhhhhhhhhhpooooooooooooooo");
+print(responseBody);
       
       
       
-           List<Map<String, String>> userData1 = [];
+         /*  List<Map<String, String>> userData1 = [];
 if (responseBody.containsKey('users')) {
   userData1 = (responseBody['users'] as List).map<Map<String, String>>((user) {
     return {
@@ -63,8 +69,8 @@ if (responseBody.containsKey('users')) {
   }).toList();
 }
 
-userData.addAll(userData1);
-print(userData);
+userData.addAll(userData1);*/
+
 
       
      
