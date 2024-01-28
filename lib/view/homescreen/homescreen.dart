@@ -1,10 +1,16 @@
 import 'package:adminsite/controller/homescreen_controller/Users_controller.dart';
 import 'package:adminsite/controller/homescreen_controller/homescreen_controller.dart';
+import 'package:adminsite/view/homescreen/Activeuser.dart';
+import 'package:adminsite/view/homescreen/Comment.dart';
+import 'package:adminsite/view/homescreen/Group.dart';
+import 'package:adminsite/view/homescreen/Job.dart';
+import 'package:adminsite/view/homescreen/Like.dart';
 import 'package:adminsite/view/homescreen/Posts.dart';
 import 'package:adminsite/view/homescreen/Reportpages/ReportComments.dart';
 import 'package:adminsite/view/homescreen/Reportpages/ReportPages.dart';
 import 'package:adminsite/view/homescreen/Reportpages/ReportUsers.dart';
 import 'package:adminsite/view/homescreen/Reportpages/RepostPosts.dart';
+import 'package:adminsite/view/homescreen/Temouser.dart';
 import 'package:adminsite/view/homescreen/Users.dart';
 import 'package:adminsite/view/homescreen/Fields.dart';
 import 'package:adminsite/view/homescreen/dashboards.dart';
@@ -61,12 +67,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   buildMenuItem('Posts', Icons.post_add),
                   buildMenuItem('Fields', Icons.task),
                   buildMenuItem('Pages', Icons.pages),
-                  buildMenuItem('Temp Users', Icons.pages),
-                  buildMenuItem('Active Users', Icons.pages),
-                  buildMenuItem('Comments', Icons.pages),
-                  buildMenuItem('Likes', Icons.pages),
-                  buildMenuItem('Groups', Icons.pages),
-                  buildMenuItem('Jobs', Icons.pages),
+                  buildMenuItem('Temp Users', Icons.people),
+                  buildMenuItem('Active Users', Icons.people),
+                  buildMenuItem('Comments', Icons.comment),
+                  buildMenuItem('Likes', Icons.comment),
+                  buildMenuItem('Groups', Icons.group),
+                  buildMenuItem('Jobs', Icons.work),
                   buildMenuItem('Reports Comments', Icons.report),
                   buildMenuItem('Reports Posts', Icons.report),
                   buildMenuItem('Reports Users', Icons.report),
@@ -172,6 +178,30 @@ Widget buildContent() {
       return Container(
         height: 500,
         child: ReportPages());
+  case 'Temp Users':
+      return Container(
+        height: 500,
+        child: TempUser());
+    case 'Active Users':
+      return Container(
+        height: 500,
+        child: ActiveUsers());
+          case 'Comments':
+      return Container(
+        height: 500,
+        child: Comment());
+          case 'Likes':
+      return Container(
+        height: 500,
+        child: Like());
+          case 'Groups':
+      return Container(
+        height: 500,
+        child: Groups());
+          case 'Jobs':
+      return Container(
+        height: 500,
+        child: Jobs());
     default:
       return Text('No content available');
   }
