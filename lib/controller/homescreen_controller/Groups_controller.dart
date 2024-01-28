@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class GroupsController extends GetxController {
-  List<Map<String, String>> fieldsData = [];
+  List<Map<String, String>> groupsData = [];
 
   getGroups() async {
     var url = "$urlStarter/admin/groups";
@@ -31,12 +31,27 @@ class GroupsController extends GetxController {
 
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
-      print("dddddddddd");
-      print(responseBody);
 
-      List<Map<String, String>> fieldsDataList = [];
+      // Extracting PageGroup data
+      var pageGroups = responseBody['PageGroup'];
 
-    
+      // Mapping PageGroup data to the desired format
+      groupsData = pageGroups
+          .map<Map<String, String>>((pageGroup) => {
+                'id': pageGroup['groupId'].toString(),
+                'groupId': pageGroup['groupId'].toString(),
+                'pageId': pageGroup['pageId'].toString(),
+                'name': pageGroup['name'].toString(),
+                'description': pageGroup['description'].toString(),
+                'parentGroup': pageGroup['parentGroup'].toString(),
+                'endDate': pageGroup['endDate'].toString(),
+                'createdAt': pageGroup['createdAt'].toString(),
+                'updatedAt': pageGroup['updatedAt'].toString(),
+              })
+          .toList();
+
+      print("groupsData:");
+      print(groupsData);
 
       return true;
     }

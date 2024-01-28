@@ -6,80 +6,52 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class PostsController extends GetxController {
+  List<Map<String, dynamic>> postsData = [];
 
-  List<Map<String, String>> userData = [
-  
-  ];
-   getPost() async {
+  getPost() async {
     var url = "$urlStarter/admin/posts";
-    var responce = await http.get(Uri.parse(url), headers: {
+    var response = await http.get(Uri.parse(url), headers: {
       'Content-type': 'application/json; charset=UTF-8',
       'Authorization': 'bearer ' + GetStorage().read('accessToken'),
     });
-    print(responce);
-    return responce;
+    return response;
   }
 
   goPosts() async {
-   
+    var response = await getPost();
 
-    var res = await getPost();
-     print("ggggggggg");
-     print(res.statusCode);
-    if (res.statusCode == 403) {
+    if (response.statusCode == 403) {
       await getRefreshToken(GetStorage().read('refreshToken'));
       goPosts();
       return;
-    } else if (res.statusCode == 401) {
-     // _logoutController.goTosigninpage();
+    } else if (response.statusCode == 401) {
+      // Handle unauthorized access
+      // _logoutController.goTosigninpage();
     }
-    var resbody = jsonDecode(res.body);
-    if (res.statusCode == 409 || res.statusCode == 500) {
-      return resbody['message'];
-    } else if (res.statusCode == 200) {
-      var responseBody = jsonDecode(res.body);
-      print("hhhhhhhhhhhhhhhhhhhhhhhhpooooooooooooooo");
-print(responseBody);
-      
-      
-      
-         /*  List<Map<String, String>> userData1 = [];
-if (responseBody.containsKey('users')) {
-  userData1 = (responseBody['users'] as List).map<Map<String, String>>((user) {
-    return {
-      'firstname': user['firstname'] ?? '',
-      'lastname': user['lastname'] ?? '',
-      'email': user['email'] ?? '',
-      'bio': user['bio'] ?? '',
-      'country': user['country'] ?? '',
-      'address': user['address'] ?? '',
-      'phone': user['phone'] ?? '',
-      'dateOfBirth': user['dateOfBirth'] ?? '',
-      'gender': user['Gender'] ?? '', // Note the case change here
-      'fields': user['Fields'] ?? '', // Note the case change here
-      'photo': user['photo'] ?? '',
-      'coverImage': user['coverImage'] ?? '',
-      'cv': user['cv'] ?? '',
-      'status': user['status'] ?? '',
-      'type': user['type'] ?? '',
-      'createdAt': user['createdAt'] ?? '',
-      'updatedAt': user['updatedAt'] ?? '',
-      'username': user['username'] ?? '',
-    };
-  }).toList();
-}
 
-userData.addAll(userData1);*/
+    if (response.statusCode == 200) {
+      var responseBody = jsonDecode(response.body);
 
+      // Extracting posts data
+      var posts = responseBody['posts'];
 
-      
-     
-     
+      // Mapping posts data to the desired format
+      postsData = posts
+          .map<Map<String, dynamic>>((post) => {
+                'postId': post['id'].toString(),
+                'createdBy': post['createdBy'].toString(),
+                'postContent': post['postContent'].toString(),
+                'selectedPrivacy': post['selectedPrivacy'].toString(),
+                'postDate': post['postDate'].toString(),
+                'commentCount': post['commentCount'],
+                'likeCount': post['likeCount'],
+              })
+          .toList();
+
+      print("postsData:");
+      print(postsData);
+
       return true;
     }
   }
-
-
-
-
 }

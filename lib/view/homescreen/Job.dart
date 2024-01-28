@@ -9,40 +9,31 @@ class Jobs extends StatefulWidget {
 }
 
 class _JobsState extends State<Jobs> {
-  List<Map<String, String>> jobsData = [
-    {
-      'jobId': 'J101',
-      'pageId': 'P101',
-      'title': 'Job Title 1',
-      'fields': 'Field1',
-      'description': 'Lorem ipsum dolor sit amet.',
-      'endDate': '2022-02-28',
-      'createdAt': '2022-01-01',
-    },
-    {
-      'jobId': 'J102',
-      'pageId': 'P102',
-      'title': 'Job Title 2',
-      'fields': 'Field2',
-      'description': 'Consectetur adipiscing elit.',
-      'endDate': '2022-03-15',
-      'createdAt': '2022-01-02',
-    },
-    // Add more sample data as needed
-  ];
+  JobsController jobController = Get.put(JobsController());
+  bool isLoading = true;
 
-    JobsController jobController = Get.put(JobsController());
-
-   @override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    jobController.goToJobs();
+    jobController.goToJobs().then((_) {
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    int jobsCount = jobsData.length;
+    if (isLoading) {
+      // Show a loading indicator while the data is being fetched
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    int jobsCount = jobController.jobsData.length;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -82,7 +73,7 @@ class _JobsState extends State<Jobs> {
                   DataColumn(label: Text('End Date')),
                   DataColumn(label: Text('Created At')),
                 ],
-                rows: jobsData
+                rows: jobController.jobsData
                     .map(
                       (job) => DataRow(
                         cells: [

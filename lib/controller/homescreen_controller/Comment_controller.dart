@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class CommentController extends GetxController {
-  List<Map<String, String>> commentsData = [];
+  List<Map<String, dynamic>> commentsData = [];
 
   getComment() async {
     var url = "$urlStarter/admin/comments";
@@ -32,11 +32,24 @@ class CommentController extends GetxController {
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
       print("dddddddddd");
-      print(responseBody);
+     // print(responseBody);
 
-      
+      // Clear existing data
+      commentsData.clear();
 
-    
+      // Iterate through comments and transform them
+      for (var comment in responseBody['comments']) {
+        Map<String, dynamic> transformedComment = {
+          'id': comment['id'].toString(),
+          'postId': comment['postId'].toString(),
+          'content': comment['commentContent'],
+          'date': comment['Date'].toString().split('T')[0],
+        };
+        commentsData.add(transformedComment);
+      }
+
+      // Now commentsData contains the transformed data
+      print(commentsData);
 
       return true;
     }

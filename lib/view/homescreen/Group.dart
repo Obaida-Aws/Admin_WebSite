@@ -9,34 +9,34 @@ class Groups extends StatefulWidget {
 }
 
 class _GroupsState extends State<Groups> {
-  List<Map<String, String>> groupsData = [
-    {
-      'id': '1',
-      'groupId': 'G101',
-      'username': 'User1',
-      'createdAt': '2022-01-01',
-    },
-    {
-      'id': '2',
-      'groupId': 'G102',
-      'username': 'User2',
-      'createdAt': '2022-01-02',
-    },
-    // Add more sample data as needed
-  ];
+  GroupsController groupController = Get.put(GroupsController());
+  bool isLoading = true;
 
-     GroupsController groupController = Get.put(GroupsController());
-
-   @override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    groupController.goToGroups();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    await groupController.goToGroups();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    int groupsCount = groupsData.length;
+    if (isLoading) {
+      // Show a loading indicator while the data is being fetched
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    int groupsCount = groupController.groupsData.length;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -68,16 +68,16 @@ class _GroupsState extends State<Groups> {
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: [
-                  DataColumn(label: Text('ID')),
+                  DataColumn(label: Text('pageId')),
                   DataColumn(label: Text('Group ID')),
                   DataColumn(label: Text('Username')),
                   DataColumn(label: Text('Created At')),
                 ],
-                rows: groupsData
+                rows: groupController.groupsData
                     .map(
                       (group) => DataRow(
                         cells: [
-                          DataCell(Text(group['id'] ?? '')),
+                          DataCell(Text(group['pageId'] ?? '')),
                           DataCell(Text(group['groupId'] ?? '')),
                           DataCell(Text(group['username'] ?? '')),
                           DataCell(Text(group['createdAt'] ?? '')),

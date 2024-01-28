@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class JobsController extends GetxController {
-  List<Map<String, String>> fieldsData = [];
+  List<Map<String, String>> jobsData = [];
 
   getJobs() async {
     var url = "$urlStarter/admin/jobs";
@@ -31,12 +31,28 @@ class JobsController extends GetxController {
 
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
-      print("dddddddddd");
+
+      // Clear existing data
+      jobsData.clear();
+
       print(responseBody);
 
-      List<Map<String, String>> fieldsDataList = [];
+      // Iterate over the PageJobs and transform the data
+      for (var pageJob in responseBody['PageJobs']) {
+        Map<String, String> transformedData = {
+          'jobId': pageJob['pageJobId'].toString(),
+          'pageId': pageJob['pageId'],
+          'title': 'Job Title ${pageJob['pageJobId']}',
+          'fields': pageJob['Fields'],
+          'description': pageJob['description'],
+          'endDate': pageJob['endDate'],
+          'createdAt': pageJob['createdAt'],
+        };
+        jobsData.add(transformedData);
+      }
 
-    
+      print("Transformed Data:");
+      print(jobsData);
 
       return true;
     }

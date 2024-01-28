@@ -9,40 +9,38 @@ class PostsContent extends StatefulWidget {
 }
 
 class _PostsContentState extends State<PostsContent> {
-  List<Map<String, dynamic>> postsData = [
-    {
-      'postId': '1',
-      'createdBy': 'John Doe',
-      'postContent': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'selectedPrivacy': 'Public',
-      'postDate': '2022-01-20',
-      'commentCount': 5,
-      'likeCount': 10,
-    },
-    {
-      'postId': '2',
-      'createdBy': 'Jane Doe',
-      'postContent': 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      'selectedPrivacy': 'Private',
-      'postDate': '2022-01-22',
-      'commentCount': 8,
-      'likeCount': 15,
-    },
-    // Add more posts as needed
-  ];
   PostsController postController = Get.put(PostsController());
+  bool isLoading = true;
+  int postsToShow = 10; // Number of posts to initially show
+  int postsPerPage = 10; // Number of posts to load per page
 
   @override
   void initState() {
     super.initState();
-    postController.goPosts();
+    loadData();
+  }
 
+  Future<void> loadData() async {
+    await postController.goPosts();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    int postsLength = postsData.length;
-    double percentage = postsLength / 100.0; // Assuming the maximum length is 100
+    if (isLoading) {
+      // Show a loading indicator while the data is being fetched
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    int postsLength = postController.postsData.length;
+    double percentage = postsLength / 100.0;
+    percentage = percentage.clamp(0.0, 1.0);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -84,7 +82,8 @@ class _PostsContentState extends State<PostsContent> {
                   DataColumn(label: Text('Comments')),
                   DataColumn(label: Text('Likes')),
                 ],
-                rows: postsData
+                rows: postController.postsData
+                    .take(postsToShow) // Display only a subset of posts
                     .map(
                       (post) => DataRow(
                         cells: [
@@ -104,6 +103,15 @@ class _PostsContentState extends State<PostsContent> {
                     .toList(),
               ),
             ),
+            if (postsToShow < postsLength)
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    postsToShow += postsPerPage;
+                  });
+                },
+                child: Text('Load More'),
+              ),
           ],
         ),
       ),
