@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class ActiveUserController extends GetxController {
-  List<Map<String, String>> fieldsData = [];
+  List<Map<String, String>> activeUsersData = [];
 
   getactiveUser() async {
     var url = "$urlStarter/admin/activeUser";
@@ -34,7 +34,21 @@ class ActiveUserController extends GetxController {
       print("dddddddddd");
       print(responseBody);
 
-      List<Map<String, String>> fieldsDataList = [];
+       List<dynamic> usersList = responseBody['users'];
+        activeUsersData.clear();
+
+      // Map the required fields and add to activeUsersData
+      for (var user in usersList) {
+        activeUsersData.add({
+          'id': user['id'].toString(),
+          'username': user['username'],
+        });
+      }
+
+      print("ffffffffffffffff");
+      print(activeUsersData);
+
+      
 
     
 

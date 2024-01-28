@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class TempUserController extends GetxController {
-  List<Map<String, String>> fieldsData = [];
+  List<Map<String, String>> tempUserData = [];
 
   gettempUser() async {
     var url = "$urlStarter/admin/tempUser";
@@ -34,9 +34,26 @@ class TempUserController extends GetxController {
       print("dddddddddd");
       print(responseBody);
 
-      List<Map<String, String>> fieldsDataList = [];
+      // Clear existing data
+      tempUserData.clear();
 
-    
+      // Extract 'tempUsers' list from the response
+      List<Map<String, dynamic>> tempUsersList = List.from(responseBody['tempUsers']);
+
+      // Transform and store data in tempUserData list
+      for (var tempUser in tempUsersList) {
+        tempUserData.add({
+          'username': tempUser['username'],
+          'firstname': tempUser['firstname'],
+          'lastname': tempUser['lastname'],
+          'email': tempUser['email'],
+          'phone': tempUser['phone'].toString(), // Convert to string if needed
+          'dateOfBirth': tempUser['dateOfBirth'],
+        });
+      }
+
+      print("kkkkkkkk");
+      print(tempUserData);
 
       return true;
     }

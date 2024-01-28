@@ -9,24 +9,25 @@ class ActiveUsers extends StatefulWidget {
 }
 
 class _ActiveUsersState extends State<ActiveUsers> {
-  List<Map<String, String>> activeUsersData = [
-    {'id': '1', 'username': 'user1'},
-    {'id': '2', 'username': 'user2'},
-    // Add more sample data as needed
-  ];
+  ActiveUserController AUserController = Get.put(ActiveUserController());
+  bool isLoading = true;
 
-    ActiveUserController AUserController = Get.put(ActiveUserController());
-
-   @override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    AUserController.goToActiveUser();
+    loadData();
+  }
+
+  loadData() async {
+    await AUserController.goToActiveUser();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    int activeUsersCount = activeUsersData.length;
+    int activeUsersCount = AUserController.activeUsersData.length;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -54,25 +55,27 @@ class _ActiveUsersState extends State<ActiveUsers> {
               progressColor: Colors.green,
             ),
             SizedBox(height: 16),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columns: [
-                  DataColumn(label: Text('ID')),
-                  DataColumn(label: Text('Username')),
-                ],
-                rows: activeUsersData
-                    .map(
-                      (user) => DataRow(
-                        cells: [
-                          DataCell(Text(user['id'] ?? '')),
-                          DataCell(Text(user['username'] ?? '')),
-                        ],
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
+            isLoading
+                ? CircularProgressIndicator()
+                : SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columns: [
+                        DataColumn(label: Text('ID')),
+                        DataColumn(label: Text('Username')),
+                      ],
+                      rows: AUserController.activeUsersData
+                          .map(
+                            (user) => DataRow(
+                              cells: [
+                                DataCell(Text(user['id'] ?? '')),
+                                DataCell(Text(user['username'] ?? '')),
+                              ],
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
           ],
         ),
       ),
