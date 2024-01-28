@@ -9,35 +9,34 @@ class ReportPosts extends StatefulWidget {
 }
 
 class _ReportPostsState extends State<ReportPosts> {
-  List<Map<String, String>> reportPostsData = [
-    {
-      'reportId': '1',
-      'title': 'Post Title 1',
-      'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'createdBy': 'User1',
-      'postId': '201',
-    },
-    {
-      'reportId': '2',
-      'title': 'Post Title 2',
-      'content': 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-      'createdBy': 'User2',
-      'postId': '202',
-    },
-    // Add more sample data as needed
-  ];
-     ReportPostsController postController = Get.put(ReportPostsController());
+  ReportPostsController postController = Get.put(ReportPostsController());
+  bool isLoading = true;
 
-   @override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    postController.goTopostReport();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    await postController.goTopostReport();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    int reportPostsCount = reportPostsData.length;
+    if (isLoading) {
+      // Data is still loading, display a loading indicator
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    int reportPostsCount = postController.reportPostsData.length;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -75,7 +74,7 @@ class _ReportPostsState extends State<ReportPosts> {
                   DataColumn(label: Text('Created By')),
                   DataColumn(label: Text('Post ID')),
                 ],
-                rows: reportPostsData
+                rows: postController.reportPostsData
                     .map(
                       (post) => DataRow(
                         cells: [

@@ -9,33 +9,34 @@ class ReportPages extends StatefulWidget {
 }
 
 class _ReportPagesState extends State<ReportPages> {
-  List<Map<String, String>> reportPagesData = [
-    {
-      'reportId': '1',
-      'pageName': 'Page1',
-      'reason': 'Fake Information',
-    },
-    {
-      'reportId': '2',
-      'pageName': 'Page2',
-      'reason': 'Spam',
-    },
-    // Add more sample data as needed
-  ];
+  ReportPagesController pageController = Get.put(ReportPagesController());
+  bool isLoading = true;
 
-     ReportPagesController pageController = Get.put(ReportPagesController());
-
-   @override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    pageController.goTopageReport();
+    loadData();
   }
- 
+
+  Future<void> loadData() async {
+    await pageController.goTopageReport();
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    int reportPagesCount = reportPagesData.length;
+    if (isLoading) {
+      // Data is still loading, display a loading indicator
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    int reportPagesCount = pageController.reportPagesData.length;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -71,7 +72,7 @@ class _ReportPagesState extends State<ReportPages> {
                   DataColumn(label: Text('Page Name')),
                   DataColumn(label: Text('Reason')),
                 ],
-                rows: reportPagesData
+                rows: pageController.reportPagesData
                     .map(
                       (page) => DataRow(
                         cells: [

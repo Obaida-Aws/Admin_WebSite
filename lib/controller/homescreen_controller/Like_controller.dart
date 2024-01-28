@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class LikeController extends GetxController {
-  List<Map<String, String>> fieldsData = [];
+  List<Map<String, String>> likesData = [];
 
   getLike() async {
     var url = "$urlStarter/admin/likes";
@@ -32,11 +32,27 @@ class LikeController extends GetxController {
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
       print("dddddddddd");
-      print(responseBody);
+     // print(responseBody);
 
-      List<Map<String, String>> fieldsDataList = [];
+      // Clear existing data
+      likesData.clear();
 
-    
+      // Extract 'likes' list from the response
+      List<Map<String, dynamic>> likesList = List.from(responseBody['likes']);
+
+      // Transform and store data in likesData list
+      for (var like in likesList) {
+        likesData.add({
+          'id': like['id'].toString(),
+          'postId': like['postId'].toString(),
+          'username': like['username'],
+          'pageId': like['pageId']?.toString() ?? '', // Convert to string if not null
+          'createdAt': like['createdAt'],
+        });
+      }
+
+      print("awsssssss");
+      print(likesData);
 
       return true;
     }

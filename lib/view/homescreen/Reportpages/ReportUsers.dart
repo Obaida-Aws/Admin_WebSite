@@ -9,32 +9,34 @@ class ReportUsers extends StatefulWidget {
 }
 
 class _ReportUsersState extends State<ReportUsers> {
-  List<Map<String, String>> reportUsersData = [
-    {
-      'reportId': '1',
-      'username': 'User1',
-      'reason': 'Inappropriate Content',
-    },
-    {
-      'reportId': '2',
-      'username': 'User2',
-      'reason': 'Harassment',
-    },
-    // Add more sample data as needed
-  ];
+  ReportUsersController userController = Get.put(ReportUsersController());
+  bool isLoading = true;
 
-     ReportUsersController userController = Get.put(ReportUsersController());
-
-   @override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    userController.goTouserReport();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    await userController.goTouserReport();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    int reportUsersCount = reportUsersData.length;
+    if (isLoading) {
+      // Data is still loading, display a loading indicator
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    int reportUsersCount = userController.reportUsersData.length;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -70,7 +72,7 @@ class _ReportUsersState extends State<ReportUsers> {
                   DataColumn(label: Text('Username')),
                   DataColumn(label: Text('Reason')),
                 ],
-                rows: reportUsersData
+                rows: userController.reportUsersData
                     .map(
                       (user) => DataRow(
                         cells: [

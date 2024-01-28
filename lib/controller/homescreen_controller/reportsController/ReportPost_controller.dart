@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class ReportPostsController extends GetxController {
-  List<Map<String, String>> fieldsData = [];
+  List<Map<String, String>> reportPostsData = [];
 
   getpostReport() async {
     var url = "$urlStarter/admin/postReport";
@@ -31,12 +31,24 @@ class ReportPostsController extends GetxController {
 
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
-      print("dddddddddd");
-      print(responseBody);
 
-      List<Map<String, String>> fieldsDataList = [];
+      // Clear existing data
+      reportPostsData.clear();
 
-    
+      // Iterate over the reported posts and transform the data
+      for (var reportedPost in responseBody['reportedPosts']) {
+        Map<String, String> transformedData = {
+          'reportId': reportedPost['id'].toString(),
+          'title': 'Post Title ${reportedPost['postId']}',
+          'content': reportedPost['text'],
+          'createdBy': reportedPost['username'],
+          'postId': reportedPost['postId'].toString(),
+        };
+        reportPostsData.add(transformedData);
+      }
+
+      print("Transformed Data:");
+      print(reportPostsData);
 
       return true;
     }

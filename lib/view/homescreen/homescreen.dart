@@ -9,7 +9,7 @@ import 'package:adminsite/view/homescreen/Posts.dart';
 import 'package:adminsite/view/homescreen/Reportpages/ReportComments.dart';
 import 'package:adminsite/view/homescreen/Reportpages/ReportPages.dart';
 import 'package:adminsite/view/homescreen/Reportpages/ReportUsers.dart';
-import 'package:adminsite/view/homescreen/Reportpages/RepostPosts.dart';
+import 'package:adminsite/view/homescreen/Reportpages/ReportPosts.dart';
 import 'package:adminsite/view/homescreen/Temouser.dart';
 import 'package:adminsite/view/homescreen/Users.dart';
 import 'package:adminsite/view/homescreen/Fields.dart';

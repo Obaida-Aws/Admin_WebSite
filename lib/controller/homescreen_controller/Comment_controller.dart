@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class CommentController extends GetxController {
-  List<Map<String, String>> fieldsData = [];
+  List<Map<String, String>> commentsData = [];
 
   getComment() async {
     var url = "$urlStarter/admin/comments";
@@ -34,7 +34,7 @@ class CommentController extends GetxController {
       print("dddddddddd");
       print(responseBody);
 
-      List<Map<String, String>> fieldsDataList = [];
+      
 
     
 

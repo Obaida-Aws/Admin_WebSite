@@ -9,36 +9,32 @@ class Like extends StatefulWidget {
 }
 
 class _LikeState extends State<Like> {
-  List<Map<String, String>> likesData = [
-    {
-      'id': '1',
-      'postId': '101',
-      'username': 'User1',
-      'pageId': '201',
-      'createdAt': '2022-01-01',
-    },
-    {
-      'id': '2',
-      'postId': '102',
-      'username': 'User2',
-      'pageId': '202',
-      'createdAt': '2022-01-02',
-    },
-    // Add more sample data as needed
-  ];
+  LikeController likeController = Get.put(LikeController());
+  bool isLoading = true;
+  int displayedItems = 10; // Number of items to display initially
 
-    LikeController likeController = Get.put(LikeController());
-
-   @override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    likeController.goToLike();
+    fetchData();
+  }
+
+  void fetchData() async {
+    await likeController.goToLike();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void loadMore() {
+    setState(() {
+      displayedItems += 10; // Increase the number of displayed items
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    int likesCount = likesData.length;
+    int likesCount = likeController.likesData.length;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -66,30 +62,38 @@ class _LikeState extends State<Like> {
               progressColor: Colors.green,
             ),
             SizedBox(height: 16),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columns: [
-                  DataColumn(label: Text('ID')),
-                  DataColumn(label: Text('Post ID')),
-                  DataColumn(label: Text('Username')),
-                  DataColumn(label: Text('Page ID')),
-                  DataColumn(label: Text('Created At')),
-                ],
-                rows: likesData
-                    .map(
-                      (like) => DataRow(
-                        cells: [
-                          DataCell(Text(like['id'] ?? '')),
-                          DataCell(Text(like['postId'] ?? '')),
-                          DataCell(Text(like['username'] ?? '')),
-                          DataCell(Text(like['pageId'] ?? '')),
-                          DataCell(Text(like['createdAt'] ?? '')),
-                        ],
-                      ),
-                    )
-                    .toList(),
-              ),
+            isLoading
+                ? CircularProgressIndicator()
+                : SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columns: [
+                        DataColumn(label: Text('ID')),
+                        DataColumn(label: Text('Post ID')),
+                        DataColumn(label: Text('Username')),
+                        DataColumn(label: Text('Page ID')),
+                        DataColumn(label: Text('Created At')),
+                      ],
+                      rows: likeController.likesData
+                          .take(displayedItems) // Display only the first N items
+                          .map(
+                            (like) => DataRow(
+                              cells: [
+                                DataCell(Text(like['id'] ?? '')),
+                                DataCell(Text(like['postId'] ?? '')),
+                                DataCell(Text(like['username'] ?? '')),
+                                DataCell(Text(like['pageId'] ?? '')),
+                                DataCell(Text(like['createdAt'] ?? '')),
+                              ],
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: loadMore,
+              child: Text('Load More'),
             ),
           ],
         ),

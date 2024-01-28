@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class ReportUsersController extends GetxController {
-  List<Map<String, String>> fieldsData = [];
+  List<Map<String, String>> reportUsersData = [];
 
   getuserReport() async {
     var url = "$urlStarter/admin/userReport";
@@ -31,12 +31,22 @@ class ReportUsersController extends GetxController {
 
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
-      print("dddddddddd");
-      print(responseBody);
 
-      List<Map<String, String>> fieldsDataList = [];
+      // Clear existing data
+      reportUsersData.clear();
 
-    
+      // Iterate over the reported users and transform the data
+      for (var reportedUser in responseBody['reportedUser']) {
+        Map<String, String> transformedData = {
+          'reportId': reportedUser['id'].toString(),
+          'username': reportedUser['username'],
+          'reason': reportedUser['text'],
+        };
+        reportUsersData.add(transformedData);
+      }
+
+      print("Transformed Data:");
+      print(reportUsersData);
 
       return true;
     }

@@ -9,21 +9,7 @@ class Comment extends StatefulWidget {
 }
 
 class _CommentState extends State<Comment> {
-  List<Map<String, String>> commentsData = [
-    {
-      'id': '1',
-      'postId': '101',
-      'content': 'Great post!',
-      'date': '2022-01-01',
-    },
-    {
-      'id': '2',
-      'postId': '102',
-      'content': 'Interesting discussion!',
-      'date': '2022-01-02',
-    },
-    // Add more sample data as needed
-  ];
+  
 
      CommentController commentController = Get.put(CommentController());
 
@@ -36,7 +22,7 @@ class _CommentState extends State<Comment> {
 
   @override
   Widget build(BuildContext context) {
-    int commentsCount = commentsData.length;
+    int commentsCount =commentController. commentsData.length;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -73,7 +59,7 @@ class _CommentState extends State<Comment> {
                   DataColumn(label: Text('Content')),
                   DataColumn(label: Text('Date')),
                 ],
-                rows: commentsData
+                rows:commentController. commentsData
                     .map(
                       (comment) => DataRow(
                         cells: [
