@@ -47,7 +47,7 @@ class LikeController extends GetxController {
           'postId': like['postId'].toString(),
           'username': like['username'],
           'pageId': like['pageId']?.toString() ?? '', // Convert to string if not null
-          'createdAt': like['createdAt'],
+          'createdAt': like['createdAt'].toString().split('T')[0],
         });
       }
 

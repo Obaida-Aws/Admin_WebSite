@@ -11,6 +11,13 @@ class Jobs extends StatefulWidget {
 class _JobsState extends State<Jobs> {
   JobsController jobController = Get.put(JobsController());
   bool isLoading = true;
+  TextEditingController jobIdFilterController = TextEditingController();
+  TextEditingController pageIdFilterController = TextEditingController();
+  TextEditingController titleFilterController = TextEditingController();
+  TextEditingController fieldsFilterController = TextEditingController();
+  TextEditingController descriptionFilterController = TextEditingController();
+  TextEditingController endDateFilterController = TextEditingController();
+  TextEditingController createdAtFilterController = TextEditingController();
 
   @override
   void initState() {
@@ -65,15 +72,149 @@ class _JobsState extends State<Jobs> {
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: [
-                  DataColumn(label: Text('Job ID')),
-                  DataColumn(label: Text('Page ID')),
-                  DataColumn(label: Text('Title')),
-                  DataColumn(label: Text('Fields')),
-                  DataColumn(label: Text('Description')),
-                  DataColumn(label: Text('End Date')),
-                  DataColumn(label: Text('Created At')),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Job ID'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: jobIdFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Page ID'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: pageIdFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Title'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: titleFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Fields'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: fieldsFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Description'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: descriptionFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('End Date'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: endDateFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Created At'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: createdAtFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
                 ],
                 rows: jobController.jobsData
+                    .where((job) =>
+                        job['jobId']!.toLowerCase().contains(jobIdFilterController.text.toLowerCase()) &&
+                        job['pageId']!.toLowerCase().contains(pageIdFilterController.text.toLowerCase()) &&
+                        job['title']!.toLowerCase().contains(titleFilterController.text.toLowerCase()) &&
+                        job['fields']!.toLowerCase().contains(fieldsFilterController.text.toLowerCase()) &&
+                        job['description']!.toLowerCase().contains(descriptionFilterController.text.toLowerCase()) &&
+                        job['endDate']!.toLowerCase().contains(endDateFilterController.text.toLowerCase()) &&
+                        job['createdAt']!.toLowerCase().contains(createdAtFilterController.text.toLowerCase()))
                     .map(
                       (job) => DataRow(
                         cells: [

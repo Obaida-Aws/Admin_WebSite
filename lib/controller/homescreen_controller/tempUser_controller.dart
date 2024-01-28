@@ -48,7 +48,7 @@ class TempUserController extends GetxController {
           'lastname': tempUser['lastname'],
           'email': tempUser['email'],
           'phone': tempUser['phone'].toString(), // Convert to string if needed
-          'dateOfBirth': tempUser['dateOfBirth'],
+          'dateOfBirth': tempUser['dateOfBirth'].toString().split('T')[0],
         });
       }
 

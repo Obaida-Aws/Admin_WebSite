@@ -44,9 +44,9 @@ class GroupsController extends GetxController {
                 'name': pageGroup['name'].toString(),
                 'description': pageGroup['description'].toString(),
                 'parentGroup': pageGroup['parentGroup'].toString(),
-                'endDate': pageGroup['endDate'].toString(),
-                'createdAt': pageGroup['createdAt'].toString(),
-                'updatedAt': pageGroup['updatedAt'].toString(),
+                'endDate': pageGroup['endDate'].toString().split('T')[0],
+                'createdAt': pageGroup['createdAt'].toString().split('T')[0],
+                'updatedAt': pageGroup['updatedAt'].toString().split('T')[0],
               })
           .toList();
 

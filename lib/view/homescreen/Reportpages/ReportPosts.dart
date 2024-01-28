@@ -10,6 +10,11 @@ class ReportPosts extends StatefulWidget {
 
 class _ReportPostsState extends State<ReportPosts> {
   ReportPostsController postController = Get.put(ReportPostsController());
+  TextEditingController reportIdFilterController = TextEditingController();
+  TextEditingController titleFilterController = TextEditingController();
+  TextEditingController contentFilterController = TextEditingController();
+  TextEditingController createdByFilterController = TextEditingController();
+  TextEditingController postIdFilterController = TextEditingController();
   bool isLoading = true;
 
   @override
@@ -68,13 +73,109 @@ class _ReportPostsState extends State<ReportPosts> {
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: [
-                  DataColumn(label: Text('Report ID')),
-                  DataColumn(label: Text('Title')),
-                  DataColumn(label: Text('Content')),
-                  DataColumn(label: Text('Created By')),
-                  DataColumn(label: Text('Post ID')),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Report ID'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: reportIdFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Title'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: titleFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Content'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: contentFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Created By'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: createdByFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Post ID'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: postIdFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
                 ],
                 rows: postController.reportPostsData
+                    .where((post) =>
+                        post['reportId']!.toLowerCase().contains(reportIdFilterController.text.toLowerCase()) &&
+                        post['title']!.toLowerCase().contains(titleFilterController.text.toLowerCase()) &&
+                        post['content']!.toLowerCase().contains(contentFilterController.text.toLowerCase()) &&
+                        post['createdBy']!.toLowerCase().contains(createdByFilterController.text.toLowerCase()) &&
+                        post['postId']!.toLowerCase().contains(postIdFilterController.text.toLowerCase()))
                     .map(
                       (post) => DataRow(
                         cells: [

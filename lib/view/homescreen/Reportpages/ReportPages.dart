@@ -10,6 +10,9 @@ class ReportPages extends StatefulWidget {
 
 class _ReportPagesState extends State<ReportPages> {
   ReportPagesController pageController = Get.put(ReportPagesController());
+  TextEditingController reportIdFilterController = TextEditingController();
+  TextEditingController pageNameFilterController = TextEditingController();
+  TextEditingController reasonFilterController = TextEditingController();
   bool isLoading = true;
 
   @override
@@ -68,11 +71,69 @@ class _ReportPagesState extends State<ReportPages> {
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: [
-                  DataColumn(label: Text('Report ID')),
-                  DataColumn(label: Text('Page Name')),
-                  DataColumn(label: Text('Reason')),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Report ID'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: reportIdFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Page Name'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: pageNameFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Reason'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: reasonFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
                 ],
                 rows: pageController.reportPagesData
+                    .where((page) =>
+                        page['reportId']!.toLowerCase().contains(reportIdFilterController.text.toLowerCase()) &&
+                        page['pageName']!.toLowerCase().contains(pageNameFilterController.text.toLowerCase()) &&
+                        page['reason']!.toLowerCase().contains(reasonFilterController.text.toLowerCase()))
                     .map(
                       (page) => DataRow(
                         cells: [

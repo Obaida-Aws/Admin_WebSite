@@ -10,30 +10,35 @@ class TempUser extends StatefulWidget {
 
 class _TempUserState extends State<TempUser> {
   TempUserController tUserController = Get.put(TempUserController());
+  TextEditingController usernameFilterController = TextEditingController();
+  TextEditingController firstNameFilterController = TextEditingController();
+  TextEditingController lastNameFilterController = TextEditingController();
+  TextEditingController emailFilterController = TextEditingController();
+  TextEditingController phoneFilterController = TextEditingController();
+  TextEditingController dobFilterController = TextEditingController();
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    tUserController.goToTempUser();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    await tUserController.goToTempUser();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-        future: tUserController.goToTempUser(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Show loading indicator while waiting for data
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            // Handle error if any
-            return Center(child: Text('Error loading data'));
-          } else {
-            // Data has been loaded, continue with the UI
-            int tempUserCount = tUserController.tempUserData.length;
+    int tempUserCount = tUserController.tempUserData.length;
 
-            return SingleChildScrollView(
+    return Scaffold(
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -62,15 +67,156 @@ class _TempUserState extends State<TempUser> {
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
                       columns: [
-                        DataColumn(label: Text('Username')),
-                        DataColumn(label: Text('First Name')),
-                        DataColumn(label: Text('Last Name')),
-                        DataColumn(label: Text('Email')),
-                        DataColumn(label: Text('Phone')),
-                        DataColumn(label: Text('Date of Birth')),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('Username'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: usernameFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('First Name'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: firstNameFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('Last Name'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: lastNameFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('Email'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: emailFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('Phone'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: phoneFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('Date of Birth'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: dobFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         DataColumn(label: Text('Delete')),
                       ],
                       rows: tUserController.tempUserData
+                          .where(
+                            (user) =>
+                                user['username']!
+                                    .toLowerCase()
+                                    .contains(usernameFilterController.text.toLowerCase()) &&
+                                user['firstname']!
+                                    .toLowerCase()
+                                    .contains(firstNameFilterController.text.toLowerCase()) &&
+                                user['lastname']!
+                                    .toLowerCase()
+                                    .contains(lastNameFilterController.text.toLowerCase()) &&
+                                user['email']!
+                                    .toLowerCase()
+                                    .contains(emailFilterController.text.toLowerCase()) &&
+                                user['phone']!
+                                    .toLowerCase()
+                                    .contains(phoneFilterController.text.toLowerCase()) &&
+                                user['dateOfBirth']!
+                                    .toLowerCase()
+                                    .contains(dobFilterController.text.toLowerCase()),
+                          )
                           .map(
                             (user) => DataRow(
                               cells: [
@@ -89,10 +235,7 @@ class _TempUserState extends State<TempUser> {
                   ),
                 ],
               ),
-            );
-          }
-        },
-      ),
+            ),
     );
   }
 

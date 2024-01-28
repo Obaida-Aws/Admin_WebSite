@@ -42,7 +42,7 @@ class PostsController extends GetxController {
                 'createdBy': post['createdBy'].toString(),
                 'postContent': post['postContent'].toString(),
                 'selectedPrivacy': post['selectedPrivacy'].toString(),
-                'postDate': post['postDate'].toString(),
+                'postDate': post['postDate'].toString().split('T')[0],
                 'commentCount': post['commentCount'],
                 'likeCount': post['likeCount'],
               })

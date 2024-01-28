@@ -1,7 +1,7 @@
-import 'package:adminsite/controller/homescreen_controller/Like_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:adminsite/controller/homescreen_controller/Like_controller.dart';
 
 class Like extends StatefulWidget {
   @override
@@ -12,6 +12,11 @@ class _LikeState extends State<Like> {
   LikeController likeController = Get.put(LikeController());
   bool isLoading = true;
   int displayedItems = 10; // Number of items to display initially
+  TextEditingController idFilterController = TextEditingController();
+  TextEditingController postIdFilterController = TextEditingController();
+  TextEditingController usernameFilterController = TextEditingController();
+  TextEditingController pageIdFilterController = TextEditingController();
+  TextEditingController createdAtFilterController = TextEditingController();
 
   @override
   void initState() {
@@ -68,13 +73,109 @@ class _LikeState extends State<Like> {
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
                       columns: [
-                        DataColumn(label: Text('ID')),
-                        DataColumn(label: Text('Post ID')),
-                        DataColumn(label: Text('Username')),
-                        DataColumn(label: Text('Page ID')),
-                        DataColumn(label: Text('Created At')),
+                        DataColumn(label: Row(
+                          children: [
+                            Text('ID'),
+                            SizedBox(width: 10),
+                            Container(
+                              width: 100,
+                              child: TextField(
+                                controller: idFilterController,
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Filter',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                        DataColumn(label: Row(
+                          children: [
+                            Text('Post ID'),
+                            SizedBox(width: 10),
+                            Container(
+                              width: 100,
+                              child: TextField(
+                                controller: postIdFilterController,
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Filter',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                        DataColumn(label: Row(
+                          children: [
+                            Text('Username'),
+                            SizedBox(width: 10),
+                            Container(
+                              width: 100,
+                              child: TextField(
+                                controller: usernameFilterController,
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Filter',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                        DataColumn(label: Row(
+                          children: [
+                            Text('Page ID'),
+                            SizedBox(width: 10),
+                            Container(
+                              width: 100,
+                              child: TextField(
+                                controller: pageIdFilterController,
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Filter',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                        DataColumn(label: Row(
+                          children: [
+                            Text('Created At'),
+                            SizedBox(width: 10),
+                            Container(
+                              width: 100,
+                              child: TextField(
+                                controller: createdAtFilterController,
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Filter',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
                       ],
                       rows: likeController.likesData
+                          .where((like) =>
+                              like['id']!.toLowerCase().contains(idFilterController.text.toLowerCase()) &&
+                              like['postId']!.toLowerCase().contains(postIdFilterController.text.toLowerCase()) &&
+                              like['username']!.toLowerCase().contains(usernameFilterController.text.toLowerCase()) &&
+                              like['pageId']!.toLowerCase().contains(pageIdFilterController.text.toLowerCase()) &&
+                              like['createdAt']!.toLowerCase().contains(createdAtFilterController.text.toLowerCase()))
                           .take(displayedItems) // Display only the first N items
                           .map(
                             (like) => DataRow(

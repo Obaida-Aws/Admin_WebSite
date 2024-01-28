@@ -8,6 +8,10 @@ import 'package:http/http.dart' as http;
 class FieldsController extends GetxController {
   List<Map<String, String>> fieldsData = [];
 
+
+
+  
+
   getFields() async {
     var url = "$urlStarter/admin/systemField";
     var response = await http.get(Uri.parse(url), headers: {
@@ -39,7 +43,7 @@ class FieldsController extends GetxController {
         fieldsDataList = (responseBody['fields'] as List).map<Map<String, String>>((field) {
           return {
             'fieldName': field['Field'] ?? '',
-            'createdAt': field['createdAt'] ?? '',
+            'createdAt': field['createdAt'].toString().split('T')[0] ?? '',
             // Add more fields as needed
           };
         }).toList();

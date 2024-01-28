@@ -46,8 +46,8 @@ class PagesController extends GetxController {
             'pageType': page['pageType'] ?? '',
             'photo': page['photo'] ?? '',
             'coverImage': page['coverImage'] ?? '',
-            'createdAt': page['createdAt'] ?? '',
-            'updatedAt': page['updatedAt'] ?? '',
+            'createdAt': page['createdAt'].toString().split('T')[0] ?? '',
+            'updatedAt': page['updatedAt'].toString().split('T')[0] ?? '',
           };
         }).toList();
       }

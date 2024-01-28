@@ -10,31 +10,39 @@ class User extends StatefulWidget {
 
 class _UserState extends State<User> {
   UsersController userController = Get.put(UsersController());
+  bool isLoading = true;
+  int usersToShow = 10;
+
+  TextEditingController firstNameFilterController = TextEditingController();
+  TextEditingController lastNameFilterController = TextEditingController();
+  TextEditingController usernameFilterController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    await userController.goUser();
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: userController.goUser(), // Replace with your actual data fetching function
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+      body: isLoading
+          ? Center(
               child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error loading data'),
-            );
-          } else {
-            int userListLength = userController.userData.length;
-            double percentage = userListLength / 1000.0;
-
-            return SingleChildScrollView(
+            )
+          : SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Users: $userListLength',
+                    'Users: ${userController.userData.length}',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -47,10 +55,10 @@ class _UserState extends State<User> {
                     animationDuration: 1000,
                     radius: 120,
                     lineWidth: 20,
-                    percent: percentage,
+                    percent: userController.userData.length / 1000.0,
                     circularStrokeCap: CircularStrokeCap.round,
                     reverse: false,
-                    center: Text('$userListLength'),
+                    center: Text('${userController.userData.length}'),
                     progressColor: Colors.green,
                   ),
                   SizedBox(height: 16),
@@ -58,8 +66,69 @@ class _UserState extends State<User> {
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
                       columns: [
-                        DataColumn(label: Text('First Name')),
-                        DataColumn(label: Text('Last Name')),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('First Name'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: firstNameFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('Last Name'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: lastNameFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('Username'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: usernameFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         DataColumn(label: Text('Email')),
                         DataColumn(label: Text('Bio')),
                         DataColumn(label: Text('Country')),
@@ -68,11 +137,11 @@ class _UserState extends State<User> {
                         DataColumn(label: Text('Date of Birth')),
                         DataColumn(label: Text('Gender')),
                         DataColumn(label: Text('Fields')),
-                        DataColumn(label: Text('Username')),
                         DataColumn(label: Text('Status')),
                         DataColumn(label: Text('Type')),
                         DataColumn(label: Text('Created At')),
                         DataColumn(label: Text('Updated At')),
+                        // Buttons for actions
                         DataColumn(label: Text('Connections')),
                         DataColumn(label: Text('Sent Connections')),
                         DataColumn(label: Text('Education Level')),
@@ -83,11 +152,17 @@ class _UserState extends State<User> {
                         DataColumn(label: Text('Posts')),
                       ],
                       rows: userController.userData
+                          .where((user) =>
+                              user['firstname']!.toLowerCase().contains(firstNameFilterController.text.toLowerCase()) &&
+                              user['lastname']!.toLowerCase().contains(lastNameFilterController.text.toLowerCase()) &&
+                              user['username']!.toLowerCase().contains(usernameFilterController.text.toLowerCase()))
+                          .take(usersToShow)
                           .map(
                             (user) => DataRow(
                               cells: [
                                 DataCell(Text(user['firstname'] ?? '')),
                                 DataCell(Text(user['lastname'] ?? '')),
+                                DataCell(Text(user['username'] ?? '')),
                                 DataCell(Text(user['email'] ?? '')),
                                 DataCell(Text(user['bio'] ?? '')),
                                 DataCell(Text(user['country'] ?? '')),
@@ -96,7 +171,6 @@ class _UserState extends State<User> {
                                 DataCell(Text(user['dateOfBirth'] ?? '')),
                                 DataCell(Text(user['gender'] ?? '')),
                                 DataCell(Text(user['fields'] ?? '')),
-                                DataCell(Text(user['username'] ?? '')),
                                 DataCell(Text(user['status'] ?? '')),
                                 DataCell(Text(user['type'] ?? '')),
                                 DataCell(Text(user['createdAt'] ?? '')),
@@ -116,12 +190,18 @@ class _UserState extends State<User> {
                           .toList(),
                     ),
                   ),
+                  if (usersToShow < userController.userData.length)
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          usersToShow += 10; // Increase the number of users to show
+                        });
+                      },
+                      child: Text('Load More'),
+                    ),
                 ],
               ),
-            );
-          }
-        },
-      ),
+            ),
     );
   }
 

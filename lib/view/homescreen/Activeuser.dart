@@ -10,6 +10,8 @@ class ActiveUsers extends StatefulWidget {
 
 class _ActiveUsersState extends State<ActiveUsers> {
   ActiveUserController AUserController = Get.put(ActiveUserController());
+  TextEditingController idFilterController = TextEditingController();
+  TextEditingController usernameFilterController = TextEditingController();
   bool isLoading = true;
 
   @override
@@ -61,10 +63,55 @@ class _ActiveUsersState extends State<ActiveUsers> {
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
                       columns: [
-                        DataColumn(label: Text('ID')),
-                        DataColumn(label: Text('Username')),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('ID'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: idFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('Username'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: usernameFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                       rows: AUserController.activeUsersData
+                          .where(
+                            (user) =>
+                                user['id']!.toLowerCase().contains(idFilterController.text.toLowerCase()) &&
+                                user['username']!.toLowerCase().contains(usernameFilterController.text.toLowerCase()),
+                          )
                           .map(
                             (user) => DataRow(
                               cells: [

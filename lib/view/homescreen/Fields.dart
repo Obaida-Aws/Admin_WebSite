@@ -11,6 +11,7 @@ class Fields extends StatefulWidget {
 class _FieldsState extends State<Fields> {
   FieldsController fieldController = Get.put(FieldsController());
   bool isLoading = true;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -43,6 +44,8 @@ class _FieldsState extends State<Fields> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // TextField for searching
+
             if (isLoading)
               CircularProgressIndicator() // Loading indicator
             else
@@ -54,6 +57,12 @@ class _FieldsState extends State<Fields> {
   }
 
   Widget buildFieldsContent(int fieldsCount, double percentage) {
+    List<Map<String, dynamic>> filteredFields = fieldController.fieldsData
+        .where((field) => field['fieldName']!
+            .toLowerCase()
+            .contains(searchController.text.toLowerCase()))
+        .toList();
+
     return Column(
       children: [
         Text(
@@ -81,12 +90,32 @@ class _FieldsState extends State<Fields> {
           scrollDirection: Axis.horizontal,
           child: DataTable(
             columns: [
-              DataColumn(label: Text('Field Name')),
+              DataColumn(
+                  label: Row(
+                children: [
+                  Text('Field Name'),
+                  SizedBox(width: 40,),
+                  Container(
+                    width: 200,
+                    child: TextField(
+                      controller: searchController,
+                      onChanged: (value) {
+                        setState(
+                            () {}); // Trigger a rebuild on TextField change
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Search Field',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ],
+              )),
               DataColumn(label: Text('Created At')),
               DataColumn(label: Text('Delete')),
               DataColumn(label: Text('Add')),
             ],
-            rows: fieldController.fieldsData
+            rows: filteredFields
                 .map(
                   (field) => DataRow(
                     cells: [

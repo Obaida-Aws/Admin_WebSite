@@ -10,6 +10,9 @@ class ReportUsers extends StatefulWidget {
 
 class _ReportUsersState extends State<ReportUsers> {
   ReportUsersController userController = Get.put(ReportUsersController());
+  TextEditingController reportIdFilterController = TextEditingController();
+  TextEditingController usernameFilterController = TextEditingController();
+  TextEditingController reasonFilterController = TextEditingController();
   bool isLoading = true;
 
   @override
@@ -68,11 +71,75 @@ class _ReportUsersState extends State<ReportUsers> {
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: [
-                  DataColumn(label: Text('Report ID')),
-                  DataColumn(label: Text('Username')),
-                  DataColumn(label: Text('Reason')),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('Report ID'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 100,
+                          child: TextField(
+                            controller: reportIdFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('Username'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 100,
+                          child: TextField(
+                            controller: usernameFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('Reason'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 100,
+                          child: TextField(
+                            controller: reasonFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
                 rows: userController.reportUsersData
+                    .where((user) =>
+                        user['reportId']!.toLowerCase().contains(reportIdFilterController.text.toLowerCase()) &&
+                        user['username']!.toLowerCase().contains(usernameFilterController.text.toLowerCase()) &&
+                        user['reason']!.toLowerCase().contains(reasonFilterController.text.toLowerCase()))
                     .map(
                       (user) => DataRow(
                         cells: [

@@ -11,8 +11,14 @@ class PostsContent extends StatefulWidget {
 class _PostsContentState extends State<PostsContent> {
   PostsController postController = Get.put(PostsController());
   bool isLoading = true;
-  int postsToShow = 10; // Number of posts to initially show
-  int postsPerPage = 10; // Number of posts to load per page
+  int postsToShow = 10;
+  int postsPerPage = 10;
+  TextEditingController createdByFilterController = TextEditingController();
+  TextEditingController postContentFilterController = TextEditingController();
+  TextEditingController privacyFilterController = TextEditingController();
+  TextEditingController postDateFilterController = TextEditingController();
+  TextEditingController commentCountFilterController = TextEditingController();
+  TextEditingController likeCountFilterController = TextEditingController();
 
   @override
   void initState() {
@@ -30,7 +36,6 @@ class _PostsContentState extends State<PostsContent> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      // Show a loading indicator while the data is being fetched
       return Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -73,17 +78,146 @@ class _PostsContentState extends State<PostsContent> {
               child: DataTable(
                 columns: [
                   DataColumn(label: Text('Post ID')),
-                  DataColumn(label: Text('Created By')),
-                  DataColumn(label: Text('Post Content')),
-                  DataColumn(label: Text('Privacy')),
-                  DataColumn(label: Text('Post Date')),
-                  DataColumn(label: Text('Comment Count')),
-                  DataColumn(label: Text('Like Count')),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('Created By'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 150,
+                          child: TextField(
+                            controller: createdByFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('Post Content'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 150,
+                          child: TextField(
+                            controller: postContentFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('Privacy'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 100,
+                          child: TextField(
+                            controller: privacyFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('Post Date'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 150,
+                          child: TextField(
+                            controller: postDateFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('Comment Count'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 100,
+                          child: TextField(
+                            controller: commentCountFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('Like Count'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 100,
+                          child: TextField(
+                            controller: likeCountFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   DataColumn(label: Text('Comments')),
                   DataColumn(label: Text('Likes')),
                 ],
                 rows: postController.postsData
-                    .take(postsToShow) // Display only a subset of posts
+                    .where(
+                      (post) =>
+                          post['createdBy'].toLowerCase().contains(createdByFilterController.text.toLowerCase()) &&
+                          post['postContent'].toLowerCase().contains(postContentFilterController.text.toLowerCase()) &&
+                          post['selectedPrivacy'].toLowerCase().contains(privacyFilterController.text.toLowerCase()) &&
+                          post['postDate'].toLowerCase().contains(postDateFilterController.text.toLowerCase()) &&
+                          post['commentCount'].toString().toLowerCase().contains(commentCountFilterController.text.toLowerCase()) &&
+                          post['likeCount'].toString().toLowerCase().contains(likeCountFilterController.text.toLowerCase()),
+                    )
+                    .take(postsToShow)
                     .map(
                       (post) => DataRow(
                         cells: [
@@ -94,7 +228,6 @@ class _PostsContentState extends State<PostsContent> {
                           DataCell(Text(post['postDate'])),
                           DataCell(Text(post['commentCount'].toString())),
                           DataCell(Text(post['likeCount'].toString())),
-                          // Buttons for actions
                           DataCell(buildActionButton('Comments', post['postId'])),
                           DataCell(buildActionButton('Likes', post['postId'])),
                         ],
@@ -121,7 +254,6 @@ class _PostsContentState extends State<PostsContent> {
   Widget buildActionButton(String action, String postId) {
     return ElevatedButton(
       onPressed: () {
-        // Perform action based on the button clicked with the specific postId
         print('Clicked $action for postId: $postId');
       },
       child: Text(action),

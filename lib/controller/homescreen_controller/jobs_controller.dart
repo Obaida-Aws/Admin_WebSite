@@ -45,8 +45,8 @@ class JobsController extends GetxController {
           'title': 'Job Title ${pageJob['pageJobId']}',
           'fields': pageJob['Fields'],
           'description': pageJob['description'],
-          'endDate': pageJob['endDate'],
-          'createdAt': pageJob['createdAt'],
+          'endDate': pageJob['endDate'].toString().split('T')[0],
+          'createdAt': pageJob['createdAt'].toString().split('T')[0],
         };
         jobsData.add(transformedData);
       }

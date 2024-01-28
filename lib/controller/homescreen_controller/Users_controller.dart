@@ -44,7 +44,7 @@ class UsersController extends GetxController {
           'country': user['country'],
           'address': user['address'],
           'phone': user['phone'],
-          'dateOfBirth': user['dateOfBirth'],
+          'dateOfBirth': user['dateOfBirth'].toString().split('T')[0],
           'gender': user['Gender'], // Note: 'Gender' instead of 'gender'
           'fields': user['Fields'], // Note: 'Fields' instead of 'fields'
           'photo': user['photo'],
@@ -52,8 +52,8 @@ class UsersController extends GetxController {
           'cv': user['cv'],
           'status': user['status'].toString(),
           'type': user['type'],
-          'createdAt': user['createdAt'],
-          'updatedAt': user['updatedAt'],
+          'createdAt': user['createdAt'].toString().split('T')[0],
+          'updatedAt': user['updatedAt'].toString().split('T')[0],
           'username': user['username'],
         });
       }

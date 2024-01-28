@@ -10,6 +10,10 @@ class Groups extends StatefulWidget {
 
 class _GroupsState extends State<Groups> {
   GroupsController groupController = Get.put(GroupsController());
+  TextEditingController pageIdFilterController = TextEditingController();
+  TextEditingController groupIdFilterController = TextEditingController();
+  TextEditingController usernameFilterController = TextEditingController();
+  TextEditingController createdAtFilterController = TextEditingController();
   bool isLoading = true;
 
   @override
@@ -68,12 +72,99 @@ class _GroupsState extends State<Groups> {
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: [
-                  DataColumn(label: Text('pageId')),
-                  DataColumn(label: Text('Group ID')),
-                  DataColumn(label: Text('Username')),
-                  DataColumn(label: Text('Created At')),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('pageId'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 100,
+                          child: TextField(
+                            controller: pageIdFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('Group ID'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 100,
+                          child: TextField(
+                            controller: groupIdFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('Username'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 100,
+                          child: TextField(
+                            controller: usernameFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataColumn(
+                    label: Row(
+                      children: [
+                        Text('Created At'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 150,
+                          child: TextField(
+                            controller: createdAtFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
                 rows: groupController.groupsData
+                    .where(
+                      (group) =>
+                          group['pageId']!.toLowerCase().contains(pageIdFilterController.text.toLowerCase()) &&
+                          group['groupId']!.toLowerCase().contains(groupIdFilterController.text.toLowerCase()) &&
+                          group['username']!.toLowerCase().contains(usernameFilterController.text.toLowerCase()) &&
+                          group['createdAt']!.toLowerCase().contains(createdAtFilterController.text.toLowerCase()),
+                    )
                     .map(
                       (group) => DataRow(
                         cells: [

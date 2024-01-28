@@ -12,6 +12,10 @@ class _CommentState extends State<Comment> {
   CommentController commentController = Get.put(CommentController());
   int displayedComments = 10; // Number of comments initially displayed
   bool isLoading = true;
+  TextEditingController idFilterController = TextEditingController();
+  TextEditingController postIdFilterController = TextEditingController();
+  TextEditingController contentFilterController = TextEditingController();
+  TextEditingController dateFilterController = TextEditingController();
 
   @override
   void initState() {
@@ -61,12 +65,89 @@ class _CommentState extends State<Comment> {
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
                       columns: [
-                        DataColumn(label: Text('ID')),
-                        DataColumn(label: Text('Post ID')),
-                        DataColumn(label: Text('Content')),
-                        DataColumn(label: Text('Date')),
+                        DataColumn(label: Row(
+                          children: [
+                            Text('ID'),
+                            SizedBox(width: 10),
+                            Container(
+                              width: 100,
+                              child: TextField(
+                                controller: idFilterController,
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Filter',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                        DataColumn(label: Row(
+                          children: [
+                            Text('Post ID'),
+                            SizedBox(width: 10),
+                            Container(
+                              width: 100,
+                              child: TextField(
+                                controller: postIdFilterController,
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Filter',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                        DataColumn(label: Row(
+                          children: [
+                            Text('Content'),
+                            SizedBox(width: 10),
+                            Container(
+                              width: 100,
+                              child: TextField(
+                                controller: contentFilterController,
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Filter',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                        DataColumn(label: Row(
+                          children: [
+                            Text('Date'),
+                            SizedBox(width: 10),
+                            Container(
+                              width: 100,
+                              child: TextField(
+                                controller: dateFilterController,
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Filter',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
                       ],
                       rows: commentController.commentsData
+                          .where((comment) =>
+                              comment['id']!.toLowerCase().contains(idFilterController.text.toLowerCase()) &&
+                              comment['postId']!.toLowerCase().contains(postIdFilterController.text.toLowerCase()) &&
+                              comment['content']!.toLowerCase().contains(contentFilterController.text.toLowerCase()) &&
+                              comment['date']!.toLowerCase().contains(dateFilterController.text.toLowerCase()))
                           .take(displayedComments)
                           .map(
                             (comment) => DataRow(
