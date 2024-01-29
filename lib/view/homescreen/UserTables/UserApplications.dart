@@ -159,36 +159,24 @@ class _UserApplicationsState extends State<UserApplications> {
                        
                       ],
                       rows: userController.userApplicationsUserData
-                          .where(
-  (user) =>
-      user['username']!
-          .toLowerCase()
-          .contains(usernameFilterController.text.toLowerCase()) &&
-      user['pageId']!
-          .toLowerCase()
-          .contains(firstNameFilterController.text.toLowerCase()) &&
-      user['createdAt']!
-          .toLowerCase()
-          .contains(emailFilterController.text.toLowerCase()) &&
-      user['updatedAt']!
-          .toLowerCase()
-          .contains(phoneFilterController.text.toLowerCase()) 
-   
-)
+    .where((user) =>
+        user['username']?.toLowerCase().contains(usernameFilterController.text.toLowerCase()) ?? false &&
+        user['pageId']?.toLowerCase().contains(firstNameFilterController.text.toLowerCase()) ?? false &&
+        user['createdAt']?.toLowerCase().contains(emailFilterController.text.toLowerCase()) ?? false &&
+        user['updatedAt']?.toLowerCase().contains(phoneFilterController.text.toLowerCase()) ?? false,
+    )
+    .map(
+    (user) => DataRow(
+        cells: [
+          DataCell(Text(user['username'] ?? '')),
+          DataCell(Text(user['pageId'] ?? '')),
+          DataCell(Text(user['updatedAt'] ?? '')),
+          DataCell(Text(user['createdAt'] ?? '')),
+        ],
+    ),
+    )
+    .toList(),
 
-                          .map(
-                            (user) => DataRow(
-                              cells: [
-                                DataCell(Text(user['username'] ?? '')),
-                                DataCell(Text(user['pageId'] ?? '')),
-                                DataCell(Text(user['updatedAt'] ?? '')),
-                                DataCell(Text(user['createdAt'] ?? '')),
-                                
-                               
-                              ],
-                            ),
-                          )
-                          .toList(),
                     ),
                   ),
                 ],

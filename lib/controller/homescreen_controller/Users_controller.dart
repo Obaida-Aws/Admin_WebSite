@@ -222,11 +222,11 @@ print(response.statusCode);
     // Transform and store data in tempUserData list
   for (var pagefollowers in userApplicationsList) {
   userApplicationsUserData.add({
-    'id': pagefollowers['id'],
-    'pageId': pagefollowers['pageJobId'],
-    'username': pagefollowers['username'],
-    'createdAt': pagefollowers['createdAt'],
-    'updatedAt': pagefollowers['note'],
+    'id': pagefollowers['id'].toString(),
+    'pageId': pagefollowers['pageJobId'].toString(),
+    'username': pagefollowers['username'].toString(),
+    'createdAt': pagefollowers['createdAt'].toString().split('T')[0],
+    'updatedAt': pagefollowers['note'].toString(),
   });
 }
 

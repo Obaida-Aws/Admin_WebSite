@@ -19,7 +19,10 @@ class _GroupsState extends State<Groups> {
   @override
   void initState() {
     super.initState();
+    print("ffffffff");
+    print(groupController.groupsData);
     loadData();
+     print("ffffffffsssss");
   }
 
   Future<void> loadData() async {
@@ -109,7 +112,7 @@ class _GroupsState extends State<Groups> {
                   DataColumn(
                     label: Row(
                       children: [
-                        Text('Username'),
+                        Text('Name'),
                         SizedBox(width: 10),
                         Container(
                           width: 100,
@@ -154,7 +157,7 @@ class _GroupsState extends State<Groups> {
                       (group) =>
                           group['pageId']!.toLowerCase().contains(pageIdFilterController.text.toLowerCase()) &&
                           group['groupId']!.toLowerCase().contains(groupIdFilterController.text.toLowerCase()) &&
-                          group['username']!.toLowerCase().contains(usernameFilterController.text.toLowerCase()) &&
+                          group['name']!.toLowerCase().contains(usernameFilterController.text.toLowerCase()) &&
                           group['createdAt']!.toLowerCase().contains(createdAtFilterController.text.toLowerCase()),
                     )
                     .map(
@@ -162,7 +165,7 @@ class _GroupsState extends State<Groups> {
                         cells: [
                           DataCell(Text(group['pageId'] ?? '')),
                           DataCell(Text(group['groupId'] ?? '')),
-                          DataCell(Text(group['username'] ?? '')),
+                          DataCell(Text(group['name'] ?? '')),
                           DataCell(Text(group['createdAt'] ?? '')),
                         ],
                       ),

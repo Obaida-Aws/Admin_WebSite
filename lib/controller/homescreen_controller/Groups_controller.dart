@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class GroupsController extends GetxController {
-  List<Map<String, String>> groupsData = [];
+  List<Map<String, dynamic>> groupsData = [];
 
   getGroups() async {
     var url = "$urlStarter/admin/groups";
@@ -31,24 +31,26 @@ class GroupsController extends GetxController {
 
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
+      print(responseBody);
 
       // Extracting PageGroup data
       var pageGroups = responseBody['PageGroup'];
 
       // Mapping PageGroup data to the desired format
-      groupsData = pageGroups
-          .map<Map<String, String>>((pageGroup) => {
-                'id': pageGroup['groupId'].toString(),
-                'groupId': pageGroup['groupId'].toString(),
-                'pageId': pageGroup['pageId'].toString(),
-                'name': pageGroup['name'].toString(),
-                'description': pageGroup['description'].toString(),
-                'parentGroup': pageGroup['parentGroup'].toString(),
-                'endDate': pageGroup['endDate'].toString().split('T')[0],
-                'createdAt': pageGroup['createdAt'].toString().split('T')[0],
-                'updatedAt': pageGroup['updatedAt'].toString().split('T')[0],
-              })
-          .toList();
+    List<Map<String, dynamic>> groupsData = pageGroups.map<Map<String, dynamic>>((pageGroup) {
+  return {
+   
+    'groupId': pageGroup['groupId'],
+    'pageId': pageGroup['pageId'],
+    'name': pageGroup['name'].toString(),
+    'description': pageGroup['description'].toString(),
+    'parentGroup': pageGroup['parentGroup']?.toString() ?? '', // Default to empty string if null
+    'memberSendMessage': pageGroup['memberSendMessage']?.toString()?.split('T')[0] ?? '', // Default to empty string if null
+    'createdAt': pageGroup['createdAt']?.toString()?.split('T')[0] ?? '', // Default to empty string if null
+    'updatedAt': pageGroup['updatedAt']?.toString()?.split('T')[0] ?? '', // Default to empty string if null
+  };
+}).toList();
+
 
       print("groupsData:");
       print(groupsData);

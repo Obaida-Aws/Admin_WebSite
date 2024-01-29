@@ -43,7 +43,7 @@ class _SentConnectionsState extends State<SentConnections> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("User Connections"),
+        title: Text("User Sent Connections"),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
