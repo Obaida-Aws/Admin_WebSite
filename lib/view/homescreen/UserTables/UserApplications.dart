@@ -51,15 +51,7 @@ class _UserApplicationsState extends State<UserApplications> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    ' $tempUserCount',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(height: 16),
+                 
                   CircularPercentIndicator(
                     animation: true,
                     animationDuration: 1000,
@@ -69,7 +61,7 @@ class _UserApplicationsState extends State<UserApplications> {
                     circularStrokeCap: CircularStrokeCap.round,
                     reverse: false,
                     center: Text('$tempUserCount'),
-                    progressColor: Colors.green,
+                    progressColor: Color.fromARGB(255, 57, 188, 221),
                   ),
                   SizedBox(height: 16),
                   SingleChildScrollView(
@@ -79,7 +71,7 @@ class _UserApplicationsState extends State<UserApplications> {
                         DataColumn(
                           label: Row(
                             children: [
-                              Text('receiverUsername'),
+                              Text('id'),
                               SizedBox(width: 10),
                               Container(
                                 width: 150,
@@ -100,7 +92,7 @@ class _UserApplicationsState extends State<UserApplications> {
                         DataColumn(
                           label: Row(
                             children: [
-                              Text('senderUsername'),
+                              Text('pageJobId'),
                               SizedBox(width: 10),
                               Container(
                                 width: 150,
@@ -122,7 +114,7 @@ class _UserApplicationsState extends State<UserApplications> {
                          DataColumn(
                           label: Row(
                             children: [
-                              Text('date'),
+                              Text('username'),
                               SizedBox(width: 10),
                               Container(
                                 width: 150,
@@ -144,7 +136,7 @@ class _UserApplicationsState extends State<UserApplications> {
                         DataColumn(
                           label: Row(
                             children: [
-                              Text('created At'),
+                              Text('note'),
                               SizedBox(width: 10),
                               Container(
                                 width: 150,
@@ -189,8 +181,9 @@ class _UserApplicationsState extends State<UserApplications> {
                               cells: [
                                 DataCell(Text(user['username'] ?? '')),
                                 DataCell(Text(user['pageId'] ?? '')),
-                                DataCell(Text(user['createdAt'] ?? '')),
                                 DataCell(Text(user['updatedAt'] ?? '')),
+                                DataCell(Text(user['createdAt'] ?? '')),
+                                
                                
                               ],
                             ),

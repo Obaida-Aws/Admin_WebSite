@@ -57,15 +57,7 @@ class _PagesState extends State<Pages> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Pages: $pagesLength',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(height: 16),
+                 
                   CircularPercentIndicator(
                     animation: true,
                     animationDuration: 1000,
@@ -75,7 +67,7 @@ class _PagesState extends State<Pages> {
                     circularStrokeCap: CircularStrokeCap.round,
                     reverse: false,
                     center: Text('$pagesLength'),
-                    progressColor: Colors.green,
+                    progressColor: Color.fromARGB(255, 57, 188, 221),
                   ),
                   SizedBox(height: 16),
                   SingleChildScrollView(

@@ -22,6 +22,9 @@ class _UserState extends State<User> {
   TextEditingController firstNameFilterController = TextEditingController();
   TextEditingController lastNameFilterController = TextEditingController();
   TextEditingController usernameFilterController = TextEditingController();
+  TextEditingController emailFilterController = TextEditingController();
+  TextEditingController phoneFilterController = TextEditingController();
+  TextEditingController dateOfBirthFilterController = TextEditingController();
 
   @override
   void initState() {
@@ -65,7 +68,7 @@ class _UserState extends State<User> {
                     circularStrokeCap: CircularStrokeCap.round,
                     reverse: false,
                     center: Text('${userController.userData.length}'),
-                    progressColor: Colors.green,
+                    progressColor: Color.fromARGB(255, 57, 188, 221),
                   ),
                   SizedBox(height: 16),
                   SingleChildScrollView(
@@ -135,12 +138,72 @@ class _UserState extends State<User> {
                             ],
                           ),
                         ),
-                        DataColumn(label: Text('Email')),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('Email'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: emailFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('Phone'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: phoneFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataColumn(
+                          label: Row(
+                            children: [
+                              Text('Date of Birth'),
+                              SizedBox(width: 10),
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                  controller: dateOfBirthFilterController,
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Filter',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         DataColumn(label: Text('Bio')),
                         DataColumn(label: Text('Country')),
                         DataColumn(label: Text('Address')),
-                        DataColumn(label: Text('Phone')),
-                        DataColumn(label: Text('Date of Birth')),
                         DataColumn(label: Text('Gender')),
                         DataColumn(label: Text('Fields')),
                         DataColumn(label: Text('Status')),
@@ -153,6 +216,7 @@ class _UserState extends State<User> {
                         DataColumn(label: Text('Education Level')),
                         DataColumn(label: Text('Work Experience')),
                         DataColumn(label: Text('User Applications')),
+                        DataColumn(label: Text('Add')),
                         DataColumn(label: Text('Update')),
                         DataColumn(label: Text('Delete')),
                         DataColumn(label: Text('Posts')),
@@ -161,7 +225,10 @@ class _UserState extends State<User> {
                           .where((user) =>
                               user['firstname']!.toLowerCase().contains(firstNameFilterController.text.toLowerCase()) &&
                               user['lastname']!.toLowerCase().contains(lastNameFilterController.text.toLowerCase()) &&
-                              user['username']!.toLowerCase().contains(usernameFilterController.text.toLowerCase()))
+                              user['username']!.toLowerCase().contains(usernameFilterController.text.toLowerCase()) &&
+                              user['email']!.toLowerCase().contains(emailFilterController.text.toLowerCase()) &&
+                              user['phone']!.toLowerCase().contains(phoneFilterController.text.toLowerCase()) &&
+                              user['dateOfBirth']!.toLowerCase().contains(dateOfBirthFilterController.text.toLowerCase()))
                           .take(usersToShow)
                           .map(
                             (user) => DataRow(
@@ -170,11 +237,11 @@ class _UserState extends State<User> {
                                 DataCell(Text(user['lastname'] ?? '')),
                                 DataCell(Text(user['username'] ?? '')),
                                 DataCell(Text(user['email'] ?? '')),
+                                DataCell(Text(user['phone'] ?? '')),
+                                DataCell(Text(user['dateOfBirth'] ?? '')),
                                 DataCell(Text(user['bio'] ?? '')),
                                 DataCell(Text(user['country'] ?? '')),
                                 DataCell(Text(user['address'] ?? '')),
-                                DataCell(Text(user['phone'] ?? '')),
-                                DataCell(Text(user['dateOfBirth'] ?? '')),
                                 DataCell(Text(user['gender'] ?? '')),
                                 DataCell(Text(user['fields'] ?? '')),
                                 DataCell(Text(user['status'] ?? '')),
@@ -187,6 +254,7 @@ class _UserState extends State<User> {
                                 DataCell(buildActionButton('Education Level', user['username'] ?? '')),
                                 DataCell(buildActionButton('Work Experience', user['username'] ?? '')),
                                 DataCell(buildActionButton('User Applications', user['username'] ?? '')),
+                                DataCell(buildActionButton('Add', user['username'] ?? '')),
                                 DataCell(buildActionButton('Update', user['username'] ?? '')),
                                 DataCell(buildActionButton('Delete', user['username'] ?? '')),
                                 DataCell(buildActionButton('Posts', user['username'] ?? '')),
@@ -211,58 +279,57 @@ class _UserState extends State<User> {
     );
   }
 
- Widget buildActionButton(String action, String username) {
-  return ElevatedButton(
-    onPressed: () {
-      // Perform action based on the button clicked with the specific username
-      switch (action) {
-        case 'Connections':
-          Get.to(Connections(username: username,));
-          print('Clicked $action for username: $username');
-          // Add your logic for 'Connections' action
-          break;
-        case 'Sent Connections':
-          Get.to(SentConnections(username: username,));
-          print('Clicked $action for username: $username');
-          // Add your logic for 'Sent Connections' action
-          break;
-        case 'Education Level':
-          Get.to(EducationalLevel(username: username,));
-          print('Clicked $action for username: $username');
-          // Add your logic for 'Education Level' action
-          break;
-        case 'Work Experience':
-          Get.to(WorkExp(username: username,));
-          print('Clicked $action for username: $username');
-          // Add your logic for 'Work Experience' action
-          break;
-        case 'User Applications':
-          Get.to(UserApplications(username: username,));
-          print('Clicked $action for username: $username');
-          // Add your logic for 'User Applications' action
-          break;
-        case 'Update':
-          // Handle 'Update' action
-          print('Clicked $action for username: $username');
-          // Add your logic for 'Update' action
-          break;
-        case 'Delete':
-          // Handle 'Delete' action
-          print('Clicked $action for username: $username');
-          // Add your logic for 'Delete' action
-          break;
-        case 'Posts':
-          Get.to(UserPostsContent(username: username,));
-          print('Clicked $action for username: $username');
-          // Add your logic for 'Posts' action
-          break;
-        default:
-          // Handle default case if needed
-          break;
-      }
-    },
-    child: Text(action),
-  );
-}
-
+  Widget buildActionButton(String action, String username) {
+    return ElevatedButton(
+      onPressed: () {
+        // Perform action based on the button clicked with the specific username
+        switch (action) {
+          case 'Connections':
+            Get.to(Connections(username: username,));
+            print('Clicked $action for username: $username');
+            // Add your logic for 'Connections' action
+            break;
+          case 'Sent Connections':
+            Get.to(SentConnections(username: username,));
+            print('Clicked $action for username: $username');
+            // Add your logic for 'Sent Connections' action
+            break;
+          case 'Education Level':
+            Get.to(EducationalLevel(username: username,));
+            print('Clicked $action for username: $username');
+            // Add your logic for 'Education Level' action
+            break;
+          case 'Work Experience':
+            Get.to(WorkExp(username: username,));
+            print('Clicked $action for username: $username');
+            // Add your logic for 'Work Experience' action
+            break;
+          case 'User Applications':
+            Get.to(UserApplications(username: username,));
+            print('Clicked $action for username: $username');
+            // Add your logic for 'User Applications' action
+            break;
+          case 'Update':
+            // Handle 'Update' action
+            print('Clicked $action for username: $username');
+            // Add your logic for 'Update' action
+            break;
+          case 'Delete':
+            // Handle 'Delete' action
+            print('Clicked $action for username: $username');
+            // Add your logic for 'Delete' action
+            break;
+          case 'Posts':
+            Get.to(UserPostsContent(username: username,));
+            print('Clicked $action for username: $username');
+            // Add your logic for 'Posts' action
+            break;
+          default:
+            // Handle default case if needed
+            break;
+        }
+      },
+      child: Text(action),
+    );
+  }
 }

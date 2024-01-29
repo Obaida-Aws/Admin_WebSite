@@ -127,12 +127,12 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 handleMenuItemClick(label);
               },
-              color: selectedMenuItem == label ? Colors.white : Colors.black,
+              color: selectedMenuItem == label ? Colors.blue : Colors.white,
             ),
             Text(
               label,
               style: TextStyle(
-                color: selectedMenuItem == label ? Colors.white : Colors.black,
+                color: selectedMenuItem == label ? Colors.blue : Colors.white,
                 fontSize: 14, // Adjust font size as needed
                 fontWeight: FontWeight.bold
               ),

@@ -112,7 +112,7 @@ class CounterCard extends StatelessWidget {
                   circularStrokeCap: CircularStrokeCap.round,
                   reverse: false,
                   center: AnimatedCountText(value: value),
-                  progressColor: Colors.green,
+                  progressColor: Color.fromARGB(255, 57, 188, 221),
                 ),
               ],
             ),

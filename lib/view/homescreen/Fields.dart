@@ -65,15 +65,7 @@ class _FieldsState extends State<Fields> {
 
     return Column(
       children: [
-        Text(
-          'Fields: $fieldsCount',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        SizedBox(height: 16),
+        
         CircularPercentIndicator(
           animation: true,
           animationDuration: 1000,
@@ -83,7 +75,7 @@ class _FieldsState extends State<Fields> {
           circularStrokeCap: CircularStrokeCap.round,
           reverse: false,
           center: Text('$fieldsCount'),
-          progressColor: Colors.green,
+          progressColor: Color.fromARGB(255, 57, 188, 221),
         ),
         SizedBox(height: 16),
         SingleChildScrollView(

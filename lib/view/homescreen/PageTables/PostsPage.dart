@@ -1,5 +1,7 @@
 import 'package:adminsite/controller/homescreen_controller/pages_controller.dart';
 import 'package:adminsite/controller/homescreen_controller/posts_controller.dart';
+import 'package:adminsite/view/homescreen/PostTables/commentPost.dart';
+import 'package:adminsite/view/homescreen/PostTables/likePost.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -60,15 +62,7 @@ class _PagePostsContentState extends State<PagePostsContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Posts: $postsLength',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            SizedBox(height: 16),
+            
             CircularPercentIndicator(
               animation: true,
               animationDuration: 1000,
@@ -78,7 +72,7 @@ class _PagePostsContentState extends State<PagePostsContent> {
               circularStrokeCap: CircularStrokeCap.round,
               reverse: false,
               center: Text('$postsLength'),
-              progressColor: Colors.green,
+              progressColor: Color.fromARGB(255, 57, 188, 221),
             ),
             SizedBox(height: 16),
             SingleChildScrollView(
@@ -259,12 +253,27 @@ class _PagePostsContentState extends State<PagePostsContent> {
     );
   }
 
-  Widget buildActionButton(String action, String postId) {
-    return ElevatedButton(
-      onPressed: () {
-        print('Clicked $action for postId: $postId');
-      },
-      child: Text(action),
-    );
-  }
+ Widget buildActionButton(String action, String postId) {
+  return ElevatedButton(
+    onPressed: () {
+      switch (action) {
+        case 'Comments':
+          // Handle Comments action
+          print('Clicked $action for postId: $postId');
+        Get.to(CommentPost(postId: postId,));
+          break;
+        case 'Likes':
+          Get.to(PostLike(postId: postId,));
+          print('Clicked $action for postId: $postId');
+         
+          break;
+        // Add more cases for other actions if needed
+        default:
+          // Handle default case or throw an error
+          print('Unknown action: $action');
+      }
+    },
+    child: Text(action),
+  );
+}
 }

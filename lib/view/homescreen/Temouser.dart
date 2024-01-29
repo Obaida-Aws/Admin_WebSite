@@ -42,15 +42,7 @@ class _TempUserState extends State<TempUser> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Temp Users: $tempUserCount',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(height: 16),
+                 
                   CircularPercentIndicator(
                     animation: true,
                     animationDuration: 1000,
@@ -60,7 +52,7 @@ class _TempUserState extends State<TempUser> {
                     circularStrokeCap: CircularStrokeCap.round,
                     reverse: false,
                     center: Text('$tempUserCount'),
-                    progressColor: Colors.green,
+                    progressColor: Color.fromARGB(255, 57, 188, 221),
                   ),
                   SizedBox(height: 16),
                   SingleChildScrollView(

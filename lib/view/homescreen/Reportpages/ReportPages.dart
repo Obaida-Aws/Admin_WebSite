@@ -46,15 +46,7 @@ class _ReportPagesState extends State<ReportPages> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Report Pages: $reportPagesCount',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            SizedBox(height: 16),
+            
             CircularPercentIndicator(
               animation: true,
               animationDuration: 1000,
@@ -64,7 +56,7 @@ class _ReportPagesState extends State<ReportPages> {
               circularStrokeCap: CircularStrokeCap.round,
               reverse: false,
               center: Text('$reportPagesCount'),
-              progressColor: Colors.green,
+              progressColor: Color.fromARGB(255, 57, 188, 221),
             ),
             SizedBox(height: 16),
             SingleChildScrollView(

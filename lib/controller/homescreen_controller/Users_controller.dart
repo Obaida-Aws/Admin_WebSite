@@ -217,16 +217,16 @@ print(response.statusCode);
     userApplicationsUserData.clear();
 
     // Extract 'tempUsers' list from the response
-    List<Map<String, dynamic>> userApplicationsList = List.from(responseBody['connection']);
+    List<Map<String, dynamic>> userApplicationsList = List.from(responseBody['userApplications']);
 
     // Transform and store data in tempUserData list
   for (var pagefollowers in userApplicationsList) {
   userApplicationsUserData.add({
     'id': pagefollowers['id'],
-    'pageId': pagefollowers['senderUsername'],
-    'username': pagefollowers['receiverUsername'],
-    'createdAt': pagefollowers['createdAt'].toString().split('T')[0],
-    'updatedAt': pagefollowers['date'].toString().split('T')[0],
+    'pageId': pagefollowers['pageJobId'],
+    'username': pagefollowers['username'],
+    'createdAt': pagefollowers['createdAt'],
+    'updatedAt': pagefollowers['note'],
   });
 }
 
@@ -329,7 +329,7 @@ goToWork(String username) async {
     print(responseBody);
 
     // Extracting posts data
-    var posts = responseBody['WorkExperience'];
+    var posts = responseBody['WorkExperiences'];
 
     // Mapping posts data to the desired format
     workData = posts
@@ -358,7 +358,7 @@ goToWork(String username) async {
 List<Map<String, dynamic>> postsDataj = [];
 
 getPosts(String username) async {
-  var url = "$urlStarter/admin/userPosts  /$username"; // Include pageId in the URL
+  var url = "$urlStarter/admin/userPosts/$username"; // Include pageId in the URL
   var response = await http.get(Uri.parse(url), headers: {
     'Content-type': 'application/json; charset=UTF-8',
     'Authorization': 'bearer ' + GetStorage().read('accessToken'),

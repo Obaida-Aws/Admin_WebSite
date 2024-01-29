@@ -46,15 +46,7 @@ class _LikeState extends State<Like> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Likes: $likesCount',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            SizedBox(height: 16),
+            
             CircularPercentIndicator(
               animation: true,
               animationDuration: 1000,
@@ -64,7 +56,7 @@ class _LikeState extends State<Like> {
               circularStrokeCap: CircularStrokeCap.round,
               reverse: false,
               center: Text('$likesCount'),
-              progressColor: Colors.green,
+              progressColor: Color.fromARGB(255, 57, 188, 221),
             ),
             SizedBox(height: 16),
             isLoading
