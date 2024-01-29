@@ -8,6 +8,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class HomeScreenController extends GetxController {
+
+  final RxString profileImageBytes = ''.obs;
     final Map<String, dynamic> dashboardData = {
     'Users': 0,
     'Active Users': 0,

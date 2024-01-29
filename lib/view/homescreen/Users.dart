@@ -1,3 +1,9 @@
+import 'package:adminsite/view/homescreen/UserTables/Connections.dart';
+import 'package:adminsite/view/homescreen/UserTables/EducationLevel.dart';
+import 'package:adminsite/view/homescreen/UserTables/SentConnections.dart';
+import 'package:adminsite/view/homescreen/UserTables/UserApplications.dart';
+import 'package:adminsite/view/homescreen/UserTables/UserPost.dart';
+import 'package:adminsite/view/homescreen/UserTables/WorkExp.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -205,13 +211,58 @@ class _UserState extends State<User> {
     );
   }
 
-  Widget buildActionButton(String action, String username) {
-    return ElevatedButton(
-      onPressed: () {
-        // Perform action based on the button clicked with the specific username
-        print('Clicked $action for username: $username');
-      },
-      child: Text(action),
-    );
-  }
+ Widget buildActionButton(String action, String username) {
+  return ElevatedButton(
+    onPressed: () {
+      // Perform action based on the button clicked with the specific username
+      switch (action) {
+        case 'Connections':
+          Get.to(Connections(username: username,));
+          print('Clicked $action for username: $username');
+          // Add your logic for 'Connections' action
+          break;
+        case 'Sent Connections':
+          Get.to(SentConnections(username: username,));
+          print('Clicked $action for username: $username');
+          // Add your logic for 'Sent Connections' action
+          break;
+        case 'Education Level':
+          Get.to(EducationalLevel(username: username,));
+          print('Clicked $action for username: $username');
+          // Add your logic for 'Education Level' action
+          break;
+        case 'Work Experience':
+          Get.to(WorkExp(username: username,));
+          print('Clicked $action for username: $username');
+          // Add your logic for 'Work Experience' action
+          break;
+        case 'User Applications':
+          Get.to(UserApplications(username: username,));
+          print('Clicked $action for username: $username');
+          // Add your logic for 'User Applications' action
+          break;
+        case 'Update':
+          // Handle 'Update' action
+          print('Clicked $action for username: $username');
+          // Add your logic for 'Update' action
+          break;
+        case 'Delete':
+          // Handle 'Delete' action
+          print('Clicked $action for username: $username');
+          // Add your logic for 'Delete' action
+          break;
+        case 'Posts':
+          Get.to(UserPostsContent(username: username,));
+          print('Clicked $action for username: $username');
+          // Add your logic for 'Posts' action
+          break;
+        default:
+          // Handle default case if needed
+          break;
+      }
+    },
+    child: Text(action),
+  );
+}
+
 }

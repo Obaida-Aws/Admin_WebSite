@@ -1,3 +1,4 @@
+import 'package:adminsite/controller/homescreen_controller/Users_controller.dart';
 import 'package:adminsite/controller/homescreen_controller/posts_controller.dart';
 import 'package:adminsite/view/homescreen/PostTables/commentPost.dart';
 import 'package:adminsite/view/homescreen/PostTables/likePost.dart';
@@ -5,13 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-class PostsContent extends StatefulWidget {
+class WorkExp extends StatefulWidget {
+    final String username;
+
+  WorkExp({required this.username});
   @override
-  _PostsContentState createState() => _PostsContentState();
+  _WorkExpState createState() => _WorkExpState();
 }
 
-class _PostsContentState extends State<PostsContent> {
-  PostsController postController = Get.put(PostsController());
+class _WorkExpState extends State<WorkExp> {
+   UsersController userController = Get.put(UsersController());
+  
   bool isLoading = true;
   int postsToShow = 10;
   int postsPerPage = 10;
@@ -29,7 +34,7 @@ class _PostsContentState extends State<PostsContent> {
   }
 
   Future<void> loadData() async {
-    await postController.goPosts();
+    await userController.goToWork(widget.username);
     setState(() {
       isLoading = false;
     });
@@ -39,17 +44,21 @@ class _PostsContentState extends State<PostsContent> {
   Widget build(BuildContext context) {
     if (isLoading) {
       return Scaffold(
+       
         body: Center(
           child: CircularProgressIndicator(),
         ),
       );
     }
 
-    int postsLength = postController.postsData.length;
-    double percentage = postsLength / 1000.0;
+    int postsLength = userController.workData.length;
+    double percentage = postsLength / 100.0;
     percentage = percentage.clamp(0.0, 1.0);
 
     return Scaffold(
+          appBar: AppBar(
+        title: Text("Work Exp"),
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -79,11 +88,11 @@ class _PostsContentState extends State<PostsContent> {
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: [
-                  DataColumn(label: Text('Post ID')),
+                  DataColumn(label: Text(' ID')),
                   DataColumn(
                     label: Row(
                       children: [
-                        Text('Created By'),
+                        Text('Username'),
                         SizedBox(width: 10),
                         Container(
                           width: 150,
@@ -104,7 +113,7 @@ class _PostsContentState extends State<PostsContent> {
                   DataColumn(
                     label: Row(
                       children: [
-                        Text('Post Content'),
+                        Text('specialty'),
                         SizedBox(width: 10),
                         Container(
                           width: 150,
@@ -125,7 +134,7 @@ class _PostsContentState extends State<PostsContent> {
                   DataColumn(
                     label: Row(
                       children: [
-                        Text('Privacy'),
+                        Text('Company'),
                         SizedBox(width: 10),
                         Container(
                           width: 100,
@@ -143,31 +152,11 @@ class _PostsContentState extends State<PostsContent> {
                       ],
                     ),
                   ),
+
                   DataColumn(
                     label: Row(
                       children: [
-                        Text('Post Date'),
-                        SizedBox(width: 10),
-                        Container(
-                          width: 150,
-                          child: TextField(
-                            controller: postDateFilterController,
-                            onChanged: (value) {
-                              setState(() {});
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Filter',
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  DataColumn(
-                    label: Row(
-                      children: [
-                        Text('Comment Count'),
+                        Text('description'),
                         SizedBox(width: 10),
                         Container(
                           width: 100,
@@ -188,7 +177,29 @@ class _PostsContentState extends State<PostsContent> {
                   DataColumn(
                     label: Row(
                       children: [
-                        Text('Like Count'),
+                        Text('startDate'),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 150,
+                          child: TextField(
+                            controller: postDateFilterController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Filter',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                   DataColumn(
+                    label: Row(
+                      children: [
+                        Text('endDate'),
                         SizedBox(width: 10),
                         Container(
                           width: 100,
@@ -206,10 +217,11 @@ class _PostsContentState extends State<PostsContent> {
                       ],
                     ),
                   ),
-                  DataColumn(label: Text('Comments')),
-                  DataColumn(label: Text('Likes')),
+                  
+                 
+    
                 ],
-                rows: postController.postsData
+                rows: userController.workData
                     .where(
                       (post) =>
                           post['createdBy'].toLowerCase().contains(createdByFilterController.text.toLowerCase()) &&
@@ -230,8 +242,7 @@ class _PostsContentState extends State<PostsContent> {
                           DataCell(Text(post['postDate'])),
                           DataCell(Text(post['commentCount'].toString())),
                           DataCell(Text(post['likeCount'].toString())),
-                          DataCell(buildActionButton('Comments', post['postId'])),
-                          DataCell(buildActionButton('Likes', post['postId'])),
+                    
                         ],
                       ),
                     )
@@ -252,27 +263,5 @@ class _PostsContentState extends State<PostsContent> {
       ),
     );
   }
-Widget buildActionButton(String action, String postId) {
-  return ElevatedButton(
-    onPressed: () {
-      switch (action) {
-        case 'Comments':
-          // Handle Comments action
-          print('Clicked $action for postId: $postId');
-        Get.to(CommentPost(postId: postId,));
-          break;
-        case 'Likes':
-          Get.to(PostLike(postId: postId,));
-          print('Clicked $action for postId: $postId');
-         
-          break;
-        // Add more cases for other actions if needed
-        default:
-          // Handle default case or throw an error
-          print('Unknown action: $action');
-      }
-    },
-    child: Text(action),
-  );
-}
+
 }

@@ -1,4 +1,11 @@
 import 'package:adminsite/controller/homescreen_controller/pages_controller.dart';
+import 'package:adminsite/view/homescreen/PageTables/AdminsPage.dart';
+import 'package:adminsite/view/homescreen/PageTables/EmployeesPages.dart';
+import 'package:adminsite/view/homescreen/PageTables/EventsPage.dart';
+import 'package:adminsite/view/homescreen/PageTables/FollowersPage.dart';
+import 'package:adminsite/view/homescreen/PageTables/GroupsPage.dart';
+import 'package:adminsite/view/homescreen/PageTables/JobsPage.dart';
+import 'package:adminsite/view/homescreen/PageTables/PostsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -342,11 +349,51 @@ class _PagesState extends State<Pages> {
   }
 
   Widget buildActionButton(String action, String pageId) {
-    return ElevatedButton(
-      onPressed: () {
+  onPressedFunction() {
+    switch (action) {
+      case 'Page':
+        // Handle action for 'Page' with the specific pageId
+        print('Clicked Page for pageId: $pageId');
+        break;
+      case 'Jobs':
+        Get.to(JobsPage(pageId:pageId ,));
+        print('Clicked Jobs for pageId: $pageId');
+        break;
+      case 'Groups':
+        Get.to(PageGroups(pageId: pageId,));
+        print('Clicked Groups for pageId: $pageId');
+        break;
+      case 'Followers':
+        Get.to(PageFollowers(pageId: pageId,));
+        print('Clicked Followers for pageId: $pageId');
+        break;
+      case 'Admins':
+        Get.to(PageAdmins(pageId: pageId,));
+        print('Clicked Admins for pageId: $pageId');
+        break;
+      case 'Employees':
+        Get.to(PageEmployees(pageId: pageId,));
+        print('Clicked Employees for pageId: $pageId');
+        break;
+      case 'Calendar':
+        Get.to(PageEvents(pageId: pageId,));
+        print('Clicked Calendar for pageId: $pageId');
+        break;
+      case 'Posts':
+        Get.to(PagePostsContent(pageId: pageId,));
+        print('Clicked Posts for pageId: $pageId');
+        break;
+      default:
+        // Handle default action
         print('Clicked $action for pageId: $pageId');
-      },
-      child: Text(action),
-    );
+        break;
+    }
   }
+
+  return ElevatedButton(
+    onPressed: onPressedFunction,
+    child: Text(action),
+  );
+}
+
 }

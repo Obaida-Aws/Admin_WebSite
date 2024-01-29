@@ -1,17 +1,20 @@
+import 'package:adminsite/controller/homescreen_controller/pages_controller.dart';
 import 'package:adminsite/controller/homescreen_controller/posts_controller.dart';
-import 'package:adminsite/view/homescreen/PostTables/commentPost.dart';
-import 'package:adminsite/view/homescreen/PostTables/likePost.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-class PostsContent extends StatefulWidget {
+class PagePostsContent extends StatefulWidget {
+  final String pageId;
+
+  PagePostsContent({required this.pageId});
   @override
-  _PostsContentState createState() => _PostsContentState();
+  _PagePostsContentState createState() => _PagePostsContentState();
 }
 
-class _PostsContentState extends State<PostsContent> {
-  PostsController postController = Get.put(PostsController());
+class _PagePostsContentState extends State<PagePostsContent> {
+
+   PagesController pageController = Get.put(PagesController());
   bool isLoading = true;
   int postsToShow = 10;
   int postsPerPage = 10;
@@ -29,7 +32,7 @@ class _PostsContentState extends State<PostsContent> {
   }
 
   Future<void> loadData() async {
-    await postController.goPosts();
+    await pageController.goToPosts(widget.pageId);
     setState(() {
       isLoading = false;
     });
@@ -45,11 +48,14 @@ class _PostsContentState extends State<PostsContent> {
       );
     }
 
-    int postsLength = postController.postsData.length;
-    double percentage = postsLength / 1000.0;
+    int postsLength = pageController.postsData.length;
+    double percentage = postsLength / 100.0;
     percentage = percentage.clamp(0.0, 1.0);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Page Posts"),
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -209,7 +215,7 @@ class _PostsContentState extends State<PostsContent> {
                   DataColumn(label: Text('Comments')),
                   DataColumn(label: Text('Likes')),
                 ],
-                rows: postController.postsData
+                rows: pageController.postsData
                     .where(
                       (post) =>
                           post['createdBy'].toLowerCase().contains(createdByFilterController.text.toLowerCase()) &&
@@ -252,27 +258,13 @@ class _PostsContentState extends State<PostsContent> {
       ),
     );
   }
-Widget buildActionButton(String action, String postId) {
-  return ElevatedButton(
-    onPressed: () {
-      switch (action) {
-        case 'Comments':
-          // Handle Comments action
-          print('Clicked $action for postId: $postId');
-        Get.to(CommentPost(postId: postId,));
-          break;
-        case 'Likes':
-          Get.to(PostLike(postId: postId,));
-          print('Clicked $action for postId: $postId');
-         
-          break;
-        // Add more cases for other actions if needed
-        default:
-          // Handle default case or throw an error
-          print('Unknown action: $action');
-      }
-    },
-    child: Text(action),
-  );
-}
+
+  Widget buildActionButton(String action, String postId) {
+    return ElevatedButton(
+      onPressed: () {
+        print('Clicked $action for postId: $postId');
+      },
+      child: Text(action),
+    );
+  }
 }

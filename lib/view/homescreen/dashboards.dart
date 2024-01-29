@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class DashboardContent extends StatefulWidget {
-
-
   @override
   _DashboardContentState createState() => _DashboardContentState();
 }
@@ -13,32 +11,25 @@ class DashboardContent extends StatefulWidget {
 class _DashboardContentState extends State<DashboardContent> {
   HomeScreenController controller = Get.put(HomeScreenController());
 
-  final Map<String, dynamic> dashboardData = {
-    'Users': 100,
-    'Active Users': 75,
-    'Pages': 20,
-    'Jobs': 30,
-    'Jobs Applications': 50,
-    'Groups': 15,
-    'Group Meetings': 10,
-    'Messages': 120,
-    'Posts': 80,
-  };
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    controller.goToDashboard();
-       print("aaaaaaaaaaa");
-    print(controller.dashboardData);
+    loadData();
   }
 
+  Future<void> loadData() async {
+    await controller.goToDashboard();
+    setState(() {}); // Trigger a rebuild to update the UI
+  }
 
   @override
   Widget build(BuildContext context) {
- 
-    int maxValue =
-        dashboardData.values.reduce((value, element) => value > element ? value : element);
+    if (controller.dashboardData.isEmpty) {
+      // Display a loading indicator while data is being loaded
+      return Center(child: CircularProgressIndicator());
+    }
+
+    int maxValue = controller.dashboardData.values.reduce((value, element) => value > element ? value : element);
 
     return Expanded(
       child: SingleChildScrollView(
@@ -48,7 +39,7 @@ class _DashboardContentState extends State<DashboardContent> {
             spacing: 16.0,
             runSpacing: 16.0,
             children: [
-              for (var entry in dashboardData.entries)
+              for (var entry in controller.dashboardData.entries)
                 CounterCard(entry.key, entry.value, maxValue),
             ],
           ),
@@ -67,11 +58,18 @@ class CounterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
+    double percentageUser=1000;
+    double percentageavtiveUsers=50;
+    double percentagePages=50;
+    double percentageJobs=200;
+    double percentagejobsApplications=1000;
+    double percentageGroups=200;
+    double percentagegroupMeeting=50;
+    double percentagemessages=2000;
+    double percentagePost=1000;
+   
 
     double percentage = value / maxValue;
-
-    // Ensure the percentage is capped between 0.0 and 1.0
     percentage = percentage.clamp(0.0, 1.0);
 
     return SizedBox(
@@ -85,7 +83,7 @@ class CounterCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.deepPurple, Colors.deepPurpleAccent],
+              colors: [Color(0xFF111D4A), Color(0xFF111D4A)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),

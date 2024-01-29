@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:adminsite/controller/homescreen_controller/Users_controller.dart';
 import 'package:adminsite/controller/homescreen_controller/homescreen_controller.dart';
+import 'package:adminsite/global.dart';
 import 'package:adminsite/view/homescreen/Activeuser.dart';
 import 'package:adminsite/view/homescreen/Comment.dart';
 import 'package:adminsite/view/homescreen/Group.dart';
@@ -17,6 +20,7 @@ import 'package:adminsite/view/homescreen/dashboards.dart';
 import 'package:adminsite/view/homescreen/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -30,13 +34,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+     String profileImage = GetStorage().read("photo",) ?? "";
+    ImageProvider<Object> profileBackgroundImage = (profileImage.isNotEmpty)
+        ? Image.network("$urlStarter/$profileImage").image
+        : const AssetImage("images/profileImage.jpg");
     return Scaffold(
       body: Row(
         children: [
           // Vertical Bar with IconButtons and Text Labels
           Container(
             width: 175, // Adjust the width as needed
-            color: Colors.deepPurple,
+            color: Color(0xFF1E1E24),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -47,12 +55,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     margin: EdgeInsets.only(top: 10),
                     child: CircleAvatar(
                       radius: 50,
-                      backgroundImage: AssetImage('images/coverImage.jpg'), // Replace with your image asset
+                      backgroundImage: controller.profileImageBytes.isNotEmpty
+                ? MemoryImage(base64Decode(controller.profileImageBytes.value))
+                : profileBackgroundImage, // Replace with your image asset
                     ),
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'Your Name',
+                    '${GetStorage().read("firstname",) }${GetStorage().read("lastname",)}',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -70,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   buildMenuItem('Temp Users', Icons.people),
                   buildMenuItem('Active Users', Icons.people),
                   buildMenuItem('Comments', Icons.comment),
-                  buildMenuItem('Likes', Icons.comment),
+                  buildMenuItem('Likes', Icons.thumb_up),
                   buildMenuItem('Groups', Icons.group),
                   buildMenuItem('Jobs', Icons.work),
                   buildMenuItem('Reports Comments', Icons.report),

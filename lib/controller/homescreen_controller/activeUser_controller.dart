@@ -39,7 +39,7 @@ class ActiveUserController extends GetxController {
 
       // Map the required fields and add to activeUsersData
       for (var user in usersList) {
-        activeUsersData.add({
+        activeUsersData.add({ 
           'id': user['id'].toString(),
           'username': user['username'],
         });
