@@ -164,7 +164,7 @@ goToPosts(String pageId) async {
   }
 }
 // get page groups
-List<Map<String, String>> groupsData = [];
+List<Map<String, dynamic>> groupsData = [];
 
 getGroups(String pageId) async {
   var url = "$urlStarter/admin/groups/$pageId"; // Include pageId in the URL
@@ -194,19 +194,19 @@ goToGroups(String pageId) async {
     var pageGroups = responseBody['PageGroup'];
 
     // Mapping PageGroup data to the desired format
-    groupsData = pageGroups
-        .map<Map<String, String>>((pageGroup) => {
-              'id': pageGroup['groupId'].toString(),
-              'groupId': pageGroup['groupId'].toString(),
-              'pageId': pageGroup['pageId'].toString(),
-              'name': pageGroup['name'].toString(),
-              'description': pageGroup['description'].toString(),
-              'parentGroup': pageGroup['parentGroup'].toString(),
-              'endDate': pageGroup['endDate'].toString().split('T')[0],
-              'createdAt': pageGroup['createdAt'].toString().split('T')[0],
-              'updatedAt': pageGroup['updatedAt'].toString().split('T')[0],
-            })
-        .toList();
+    groupsData = pageGroups.map<Map<String, dynamic>>((pageGroup) {
+  return {
+   
+    'groupId': pageGroup['groupId'].toString(),
+    'pageId': pageGroup['pageId'].toString(),
+    'name': pageGroup['name'].toString(),
+    'description': pageGroup['description'].toString(),
+    'parentGroup': pageGroup['parentGroup']?.toString() ?? '', // Default to empty string if null
+    'memberSendMessage': pageGroup['memberSendMessage']?.toString()?.split('T')[0] ?? '', // Default to empty string if null
+    'createdAt': pageGroup['createdAt']?.toString()?.split('T')[0] ?? '', // Default to empty string if null
+    'updatedAt': pageGroup['updatedAt']?.toString()?.split('T')[0] ?? '', // Default to empty string if null
+  };
+}).toList();
 
     print("groupsData:");
     print(groupsData);

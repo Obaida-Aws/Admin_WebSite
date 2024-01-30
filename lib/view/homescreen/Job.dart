@@ -230,7 +230,7 @@ class _JobsState extends State<Jobs> {
   }
 
   double calculatePercentage(int count) {
-    double percentage = count / 200.0;
+    double percentage = count / 500.0;
     if (percentage > 1.0) {
       percentage = 1.0;
     }

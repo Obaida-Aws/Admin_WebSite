@@ -31,17 +31,17 @@ class GroupsController extends GetxController {
 
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
-      print(responseBody);
+    //  print(responseBody);
 
       // Extracting PageGroup data
       var pageGroups = responseBody['PageGroup'];
 
       // Mapping PageGroup data to the desired format
-    List<Map<String, dynamic>> groupsData = pageGroups.map<Map<String, dynamic>>((pageGroup) {
+     groupsData = pageGroups.map<Map<String, dynamic>>((pageGroup) {
   return {
    
-    'groupId': pageGroup['groupId'],
-    'pageId': pageGroup['pageId'],
+    'groupId': pageGroup['groupId'].toString(),
+    'pageId': pageGroup['pageId'].toString(),
     'name': pageGroup['name'].toString(),
     'description': pageGroup['description'].toString(),
     'parentGroup': pageGroup['parentGroup']?.toString() ?? '', // Default to empty string if null

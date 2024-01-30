@@ -10,23 +10,24 @@ class Groups extends StatefulWidget {
 
 class _GroupsState extends State<Groups> {
   GroupsController groupController = Get.put(GroupsController());
-  TextEditingController pageIdFilterController = TextEditingController();
-  TextEditingController groupIdFilterController = TextEditingController();
-  TextEditingController usernameFilterController = TextEditingController();
-  TextEditingController createdAtFilterController = TextEditingController();
   bool isLoading = true;
+
+  TextEditingController groupIdFilterController = TextEditingController();
+  TextEditingController nameFilterController = TextEditingController();
+  TextEditingController descriptionFilterController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    print("ffffffff");
-    print(groupController.groupsData);
     loadData();
-     print("ffffffffsssss");
+    print("ffffffffsssss");
   }
 
   Future<void> loadData() async {
     await groupController.goToGroups();
+    print(
+        "ffffffffbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+    print(groupController.groupsData);
     setState(() {
       isLoading = false;
     });
@@ -50,7 +51,6 @@ class _GroupsState extends State<Groups> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-           
             CircularPercentIndicator(
               animation: true,
               animationDuration: 1000,
@@ -68,25 +68,7 @@ class _GroupsState extends State<Groups> {
               child: DataTable(
                 columns: [
                   DataColumn(
-                    label: Row(
-                      children: [
-                        Text('pageId'),
-                        SizedBox(width: 10),
-                        Container(
-                          width: 100,
-                          child: TextField(
-                            controller: pageIdFilterController,
-                            onChanged: (value) {
-                              setState(() {});
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Filter',
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    label:Text('Page ID'),
                   ),
                   DataColumn(
                     label: Row(
@@ -115,9 +97,9 @@ class _GroupsState extends State<Groups> {
                         Text('Name'),
                         SizedBox(width: 10),
                         Container(
-                          width: 100,
+                          width: 150,
                           child: TextField(
-                            controller: usernameFilterController,
+                            controller: nameFilterController,
                             onChanged: (value) {
                               setState(() {});
                             },
@@ -133,12 +115,12 @@ class _GroupsState extends State<Groups> {
                   DataColumn(
                     label: Row(
                       children: [
-                        Text('Created At'),
+                        Text('Description'),
                         SizedBox(width: 10),
                         Container(
                           width: 150,
                           child: TextField(
-                            controller: createdAtFilterController,
+                            controller: descriptionFilterController,
                             onChanged: (value) {
                               setState(() {});
                             },
@@ -151,14 +133,25 @@ class _GroupsState extends State<Groups> {
                       ],
                     ),
                   ),
+                  DataColumn(
+                    label: Text('Parent Group'),
+                  ),
+                  DataColumn(
+                    label: Text('Member Send Message'),
+                  ),
+                  DataColumn(
+                    label: Text('Created At'),
+                  ),
+                  DataColumn(
+                    label: Text('Updated At'),
+                  ),
                 ],
                 rows: groupController.groupsData
                     .where(
                       (group) =>
-                          group['pageId']!.toLowerCase().contains(pageIdFilterController.text.toLowerCase()) &&
                           group['groupId']!.toLowerCase().contains(groupIdFilterController.text.toLowerCase()) &&
-                          group['name']!.toLowerCase().contains(usernameFilterController.text.toLowerCase()) &&
-                          group['createdAt']!.toLowerCase().contains(createdAtFilterController.text.toLowerCase()),
+                          group['name']!.toLowerCase().contains(nameFilterController.text.toLowerCase()) &&
+                          group['description']!.toLowerCase().contains(descriptionFilterController.text.toLowerCase()),
                     )
                     .map(
                       (group) => DataRow(
@@ -166,7 +159,11 @@ class _GroupsState extends State<Groups> {
                           DataCell(Text(group['pageId'] ?? '')),
                           DataCell(Text(group['groupId'] ?? '')),
                           DataCell(Text(group['name'] ?? '')),
+                          DataCell(Text(group['description'] ?? '')),
+                          DataCell(Text(group['parentGroup'] ?? '')),
+                          DataCell(Text(group['memberSendMessage'] ?? '')),
                           DataCell(Text(group['createdAt'] ?? '')),
+                          DataCell(Text(group['updatedAt'] ?? '')),
                         ],
                       ),
                     )
