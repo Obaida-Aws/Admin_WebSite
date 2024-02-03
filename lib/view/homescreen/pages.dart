@@ -284,7 +284,7 @@ class _PagesState extends State<Pages> {
                             ],
                           ),
                         ),
-                        DataColumn(label: Text('Page')),
+                      
                         DataColumn(label: Text('Jobs')),
                         DataColumn(label: Text('Groups')),
                         DataColumn(label: Text('Followers')),
@@ -320,7 +320,6 @@ class _PagesState extends State<Pages> {
                                 DataCell(Text(page['pageType'] ?? '')),
                                 DataCell(Text(page['createdAt'] ?? '')),
                                 DataCell(Text(page['updatedAt'] ?? '')),
-                                DataCell(buildActionButton('Page', page['id'] ?? '')),
                                 DataCell(buildActionButton('Jobs', page['id'] ?? '')),
                                 DataCell(buildActionButton('Groups', page['id'] ?? '')),
                                 DataCell(buildActionButton('Followers', page['id'] ?? '')),
@@ -343,10 +342,7 @@ class _PagesState extends State<Pages> {
   Widget buildActionButton(String action, String pageId) {
   onPressedFunction() {
     switch (action) {
-      case 'Page':
-        // Handle action for 'Page' with the specific pageId
-        print('Clicked Page for pageId: $pageId');
-        break;
+
       case 'Jobs':
         Get.to(JobsPage(pageId:pageId ,));
         print('Clicked Jobs for pageId: $pageId');

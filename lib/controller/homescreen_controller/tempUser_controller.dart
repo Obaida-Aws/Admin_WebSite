@@ -58,4 +58,51 @@ class TempUserController extends GetxController {
       return true;
     }
   }
+
+@override
+postDeleteTempUser(userUsername) async {
+  var url = "$urlStarter/admin/tempUser";
+  var response = await http.delete(
+    Uri.parse(url),
+    body: jsonEncode({
+      "userUsername": userUsername,
+    }),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      'Authorization': 'bearer ' + GetStorage().read('accessToken'),
+    },
+  );
+  return response;
+}
+
+@override
+Confirmation(userUsername) async {
+  try {
+    var res = await postDeleteTempUser(userUsername);
+    if (res.statusCode == 403) {
+      await getRefreshToken(GetStorage().read('refreshToken'));
+      postDeleteTempUser(userUsername);
+      return;
+    } else if (res.statusCode == 401) {
+      // Handle unauthorized access, e.g., navigate to login page
+      // _logoutController.goTosigninpage();
+    }
+    print(res.body);
+    var resBody = jsonDecode(res.body);
+    print(resBody['message']);
+    print(res.statusCode);
+    if (res.statusCode == 409 || res.statusCode == 500) {
+      print(res.statusCode);
+      return resBody['message'];
+    } else if (res.statusCode == 200) {
+      resBody['message'] = "";
+      // Handle success, e.g., navigate to another page or show a success message
+      // _logoutController.goTosigninpage();
+    }
+  } catch (err) {
+    print(err);
+    return "server error";
+  }
+}
+
 }

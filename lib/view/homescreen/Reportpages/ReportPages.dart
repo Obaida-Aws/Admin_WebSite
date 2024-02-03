@@ -13,6 +13,7 @@ class _ReportPagesState extends State<ReportPages> {
   TextEditingController reportIdFilterController = TextEditingController();
   TextEditingController pageNameFilterController = TextEditingController();
   TextEditingController reasonFilterController = TextEditingController();
+  TextEditingController usernameFilterController = TextEditingController();
   bool isLoading = true;
 
   @override
@@ -46,7 +47,6 @@ class _ReportPagesState extends State<ReportPages> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            
             CircularPercentIndicator(
               animation: true,
               animationDuration: 1000,
@@ -63,6 +63,25 @@ class _ReportPagesState extends State<ReportPages> {
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: [
+                  DataColumn(label: Row(
+                    children: [
+                      Text('Username'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: usernameFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
                   DataColumn(label: Row(
                     children: [
                       Text('Report ID'),
@@ -123,12 +142,14 @@ class _ReportPagesState extends State<ReportPages> {
                 ],
                 rows: pageController.reportPagesData
                     .where((page) =>
+                        page['username']!.toLowerCase().contains(usernameFilterController.text.toLowerCase()) &&
                         page['reportId']!.toLowerCase().contains(reportIdFilterController.text.toLowerCase()) &&
                         page['pageName']!.toLowerCase().contains(pageNameFilterController.text.toLowerCase()) &&
                         page['reason']!.toLowerCase().contains(reasonFilterController.text.toLowerCase()))
                     .map(
                       (page) => DataRow(
                         cells: [
+                          DataCell(Text(page['username'] ?? '')),
                           DataCell(Text(page['reportId'] ?? '')),
                           DataCell(Text(page['pageName'] ?? '')),
                           DataCell(Text(page['reason'] ?? '')),

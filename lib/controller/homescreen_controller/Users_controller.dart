@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:adminsite/global.dart';
+import 'package:adminsite/view/homescreen/Add_User/UpdateUser.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -403,6 +404,149 @@ print(response.statusCode);
     return true;
   }
 }
+
+// go to edit user 
+  @override
+  Future getProfileSettingsPgae(String email) async {
+    var url = "$urlStarter/user/settingsGetMainInfo?email=$email";
+    var accessToken = GetStorage().read('accessToken') ?? "";
+    var responce = await http.get(Uri.parse(url), headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      'Authorization': 'bearer ' + accessToken,
+    });
+    print(responce);
+    return responce;
+  }
+
+  @override
+  goToProfileSettingsPgae(String email) async {
+    var res = await getProfileSettingsPgae(email);
+    if (res.statusCode == 403) {
+      await getRefreshToken(GetStorage().read('refreshToken'));
+      goToProfileSettingsPgae(email);
+      return;
+    } else if (res.statusCode == 401) {
+            print("2222222222222222222222222");
+
+     
+    }
+    var resbody = jsonDecode(res.body);
+    if (res.statusCode == 409) {
+      return resbody['message'];
+    } else if (res.statusCode == 200) {
+      print(resbody['availableFields']);
+      print(resbody['user']);
+      GetStorage().write("photo", resbody["user"]["photo"]);
+      print("sooooooooooooooooooooooooooooo");
+      print([resbody["user"]]);
+      Get.to(ProfileSettings(
+  userData: [resbody["user"]],
+  availableFields: List<Map<String, dynamic>>.from(resbody['availableFields']),
+));
+
+    }
+  }
+  //////////////////////////////////////////////
+  
+  getFields() async {
+    var url = "$urlStarter/user/getJobFields";
+    var response = await http.get(Uri.parse(url), headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      'Authorization': 'bearer ' + GetStorage().read('accessToken'),
+    });
+
+    print(response.statusCode);
+    if (response.statusCode == 403) {
+      await getRefreshToken(GetStorage().read('refreshToken'));
+      getFields();
+      return;
+    } else if (response.statusCode == 401) {
+    
+    }
+
+    if (response.statusCode == 409) {
+      var responseBody = jsonDecode(response.body);
+      print(responseBody['message']);
+      return;
+    } else if (response.statusCode == 200) {
+      var responseBody = jsonDecode(response.body);
+
+     
+  /*Get.off(
+    NewJobPost(
+      pageId: pageId,
+      availableFields: List<Map<String, dynamic>>.from(
+        responseBody['availableFields'],
+      ),
+    ),
+  );*/
+
+
+
+      
+    }
+
+    return;
+  }
+
+
+
+
+
+
+
+
+  /////////////////////////////////////
+
+
+// delete
+  @override
+postDeleteUser(username) async {
+  var url = "$urlStarter/admin/user";
+  var response = await http.delete(
+    Uri.parse(url),
+    body: jsonEncode({
+      "username": username,
+    }),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      'Authorization': 'bearer ' + GetStorage().read('accessToken'),
+    },
+  );
+  return response;
+}
+
+@override
+Confirmation(username) async {
+  try {
+    var res = await postDeleteUser(username);
+    if (res.statusCode == 403) {
+      await getRefreshToken(GetStorage().read('refreshToken'));
+      postDeleteUser(username);
+      return;
+    } else if (res.statusCode == 401) {
+      // Handle unauthorized access, e.g., navigate to login page
+      // _logoutController.goTosigninpage();
+    }
+    var resBody = jsonDecode(res.body);
+    print(resBody['message']);
+    print(res.statusCode);
+    if (res.statusCode == 409 || res.statusCode == 500) {
+      print(res.statusCode);
+      return resBody['message'];
+    } else if (res.statusCode == 200) {
+      resBody['message'] = "";
+      Get.back();
+      // Handle success, e.g., navigate to another page or show a success message
+      // _logoutController.goTosigninpage();
+    }
+  } catch (err) {
+    print(err);
+    return "server error";
+  }
+}
+
+
 
 
 

@@ -74,6 +74,26 @@ class _ReportCommentsState extends State<ReportComments> {
                             ),
                           ],
                         )),
+
+                         DataColumn(label: Row(
+                          children: [
+                            Text('Username'),
+                            SizedBox(width: 10),
+                            Container(
+                              width: 100,
+                              child: TextField(
+                                controller: createdByFilterController,
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Filter',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
                         DataColumn(label: Row(
                           children: [
                             Text('Content'),
@@ -93,25 +113,7 @@ class _ReportCommentsState extends State<ReportComments> {
                             ),
                           ],
                         )),
-                        DataColumn(label: Row(
-                          children: [
-                            Text('Created By'),
-                            SizedBox(width: 10),
-                            Container(
-                              width: 100,
-                              child: TextField(
-                                controller: createdByFilterController,
-                                onChanged: (value) {
-                                  setState(() {});
-                                },
-                                decoration: InputDecoration(
-                                  labelText: 'Filter',
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )),
+                       
                         DataColumn(label: Row(
                           children: [
                             Text('Comment ID'),
@@ -136,14 +138,14 @@ class _ReportCommentsState extends State<ReportComments> {
                           .where((comment) =>
                               comment['reportId']!.toLowerCase().contains(reportIdFilterController.text.toLowerCase()) &&
                               comment['content']!.toLowerCase().contains(contentFilterController.text.toLowerCase()) &&
-                              comment['createdBy']!.toLowerCase().contains(createdByFilterController.text.toLowerCase()) &&
+                              comment['username']!.toLowerCase().contains(createdByFilterController.text.toLowerCase()) &&
                               comment['commentId']!.toLowerCase().contains(commentIdFilterController.text.toLowerCase()))
                           .map(
                             (comment) => DataRow(
                               cells: [
                                 DataCell(Text(comment['reportId'] ?? '')),
+                                DataCell(Text(comment['username'] ?? '')),
                                 DataCell(Text(comment['content'] ?? '')),
-                                DataCell(Text(comment['createdBy'] ?? '')),
                                 DataCell(Text(comment['commentId'] ?? '')),
                               ],
                             ),

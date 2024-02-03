@@ -87,6 +87,25 @@ class _ReportPostsState extends State<ReportPosts> {
                   )),
                   DataColumn(label: Row(
                     children: [
+                      Text('userName'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: TextField(
+                          controller: createdByFilterController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Filter',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  DataColumn(label: Row(
+                    children: [
                       Text('Title'),
                       SizedBox(width: 10),
                       Container(
@@ -123,25 +142,7 @@ class _ReportPostsState extends State<ReportPosts> {
                       ),
                     ],
                   )),
-                  DataColumn(label: Row(
-                    children: [
-                      Text('Created By'),
-                      SizedBox(width: 10),
-                      Container(
-                        width: 100,
-                        child: TextField(
-                          controller: createdByFilterController,
-                          onChanged: (value) {
-                            setState(() {});
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'Filter',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
+                  
                   DataColumn(label: Row(
                     children: [
                       Text('Post ID'),
@@ -167,15 +168,15 @@ class _ReportPostsState extends State<ReportPosts> {
                         post['reportId']!.toLowerCase().contains(reportIdFilterController.text.toLowerCase()) &&
                         post['title']!.toLowerCase().contains(titleFilterController.text.toLowerCase()) &&
                         post['content']!.toLowerCase().contains(contentFilterController.text.toLowerCase()) &&
-                        post['createdBy']!.toLowerCase().contains(createdByFilterController.text.toLowerCase()) &&
+                        post['username']!.toLowerCase().contains(createdByFilterController.text.toLowerCase()) &&
                         post['postId']!.toLowerCase().contains(postIdFilterController.text.toLowerCase()))
                     .map(
                       (post) => DataRow(
                         cells: [
                           DataCell(Text(post['reportId'] ?? '')),
+                           DataCell(Text(post['username'] ?? '')),
                           DataCell(Text(post['title'] ?? '')),
                           DataCell(Text(post['content'] ?? '')),
-                          DataCell(Text(post['createdBy'] ?? '')),
                           DataCell(Text(post['postId'] ?? '')),
                         ],
                       ),

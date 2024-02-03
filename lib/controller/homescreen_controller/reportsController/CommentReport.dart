@@ -43,7 +43,7 @@ class ReportCommentController extends GetxController {
         Map<String, String> formattedComment = {
           'reportId': comment['id'].toString(),
           'content': comment['text'],
-          'createdBy': comment['username'],
+          'username': comment['username'],
           'commentId': comment['commentId'].toString(),
         };
 

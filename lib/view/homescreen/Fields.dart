@@ -9,6 +9,7 @@ class Fields extends StatefulWidget {
 }
 
 class _FieldsState extends State<Fields> {
+  final _formKey = GlobalKey<FormState>();
   FieldsController fieldController = Get.put(FieldsController());
   bool isLoading = true;
   TextEditingController searchController = TextEditingController();
@@ -40,14 +41,24 @@ class _FieldsState extends State<Fields> {
     double percentage = calculatePercentage(fieldsCount);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Fields'),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              // Show dialog to enter new field name
+              showDialogToAddNewField(context);
+            },
+            child: Text('Add New Fields'),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // TextField for searching
-
             if (isLoading)
-              CircularProgressIndicator() // Loading indicator
+              CircularProgressIndicator()
             else
               buildFieldsContent(fieldsCount, percentage),
           ],
@@ -65,7 +76,6 @@ class _FieldsState extends State<Fields> {
 
     return Column(
       children: [
-        
         CircularPercentIndicator(
           animation: true,
           animationDuration: 1000,
@@ -83,29 +93,30 @@ class _FieldsState extends State<Fields> {
           child: DataTable(
             columns: [
               DataColumn(
-                  label: Row(
-                children: [
-                  Text('Field Name'),
-                  SizedBox(width: 40,),
-                  Container(
-                    width: 200,
-                    child: TextField(
-                      controller: searchController,
-                      onChanged: (value) {
-                        setState(
-                            () {}); // Trigger a rebuild on TextField change
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Search Field',
-                        border: OutlineInputBorder(),
+                label: Row(
+                  children: [
+                    Text('Field Name'),
+                    SizedBox(
+                      width: 40,
+                    ),
+                    Container(
+                      width: 200,
+                      child: TextField(
+                        controller: searchController,
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Search Field',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              )),
+                  ],
+                ),
+              ),
               DataColumn(label: Text('Created At')),
               DataColumn(label: Text('Delete')),
-              DataColumn(label: Text('Add')),
             ],
             rows: filteredFields
                 .map(
@@ -114,7 +125,6 @@ class _FieldsState extends State<Fields> {
                       DataCell(Text(field['fieldName'] ?? '')),
                       DataCell(Text(field['createdAt'] ?? '')),
                       DataCell(buildDeleteButton(field['fieldName'] ?? '')),
-                      DataCell(buildAddButton(field['fieldName'] ?? '')),
                     ],
                   ),
                 )
@@ -128,20 +138,65 @@ class _FieldsState extends State<Fields> {
   Widget buildDeleteButton(String fieldName) {
     return ElevatedButton(
       onPressed: () {
-        // Implement delete functionality here with the specific fieldName
+        fieldController.Confirmation(fieldName);
         print('Clicked Delete for fieldName: $fieldName');
+        loadData();
       },
       child: Text('Delete'),
     );
   }
 
-  Widget buildAddButton(String fieldName) {
-    return ElevatedButton(
-      onPressed: () {
-        // Implement add functionality here with the specific fieldName
-        print('Clicked Add for fieldName: $fieldName');
-      },
-      child: Text('Add'),
+  void showDialogToAddNewField(BuildContext context) {
+    TextEditingController newFieldNameController = TextEditingController();
+
+    Get.defaultDialog(
+      title: 'Add New Field',
+      content: Column(
+        children: [
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              controller: newFieldNameController,
+              decoration: InputDecoration(
+                hintText: "Enter New Field Name",
+                hintStyle: const TextStyle(
+                  fontSize: 14,
+                ),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                labelText: "FiledName",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Field Name cannot be empty';
+                }
+                return null;
+              },
+            ),
+          ),
+          SizedBox(height: 16),
+         ElevatedButton(
+              onPressed: () {
+                // Validate the form before performing the action
+                if (_formKey.currentState!.validate()) {
+                  // Form is valid, perform the action
+                  String newFieldName = newFieldNameController.text;
+                  if (newFieldName.isNotEmpty) {
+                    fieldController.addField(newFieldName.trim());
+                    print('New Field Name: $newFieldName');
+                  }
+                  Get.back(); // Close the dialog
+                  loadData();
+                }
+              },
+              child: Text('Add'),
+            ),
+        ],
+      ),
     );
   }
 }

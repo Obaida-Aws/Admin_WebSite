@@ -1,3 +1,4 @@
+import 'package:adminsite/view/homescreen/Add_User/AddNewUser.dart';
 import 'package:adminsite/view/homescreen/UserTables/Connections.dart';
 import 'package:adminsite/view/homescreen/UserTables/EducationLevel.dart';
 import 'package:adminsite/view/homescreen/UserTables/SentConnections.dart';
@@ -50,25 +51,31 @@ class _UserState extends State<User> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Users: ${userController.userData.length}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                  Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 400),
+                        child: CircularPercentIndicator(
+                          animation: true,
+                          animationDuration: 1000,
+                          radius: 120,
+                          lineWidth: 20,
+                          percent: userController.userData.length / 1000.0,
+                          circularStrokeCap: CircularStrokeCap.round,
+                          reverse: false,
+                          center: Text('${userController.userData.length}'),
+                          progressColor: Color.fromARGB(255, 57, 188, 221),
+                        ),
+                      ),
+                      Spacer(),
+                       ElevatedButton(
+                    onPressed: () {
+  
+                       Get.to(SignUp());
+                    },
+                    child: Text('Add New User'),
                   ),
-                  SizedBox(height: 16),
-                  CircularPercentIndicator(
-                    animation: true,
-                    animationDuration: 1000,
-                    radius: 120,
-                    lineWidth: 20,
-                    percent: userController.userData.length / 1000.0,
-                    circularStrokeCap: CircularStrokeCap.round,
-                    reverse: false,
-                    center: Text('${userController.userData.length}'),
-                    progressColor: Color.fromARGB(255, 57, 188, 221),
+                    ],
                   ),
                   SizedBox(height: 16),
                   SingleChildScrollView(
@@ -216,7 +223,6 @@ class _UserState extends State<User> {
                         DataColumn(label: Text('Education Level')),
                         DataColumn(label: Text('Work Experience')),
                         DataColumn(label: Text('User Applications')),
-                        DataColumn(label: Text('Add')),
                         DataColumn(label: Text('Update')),
                         DataColumn(label: Text('Delete')),
                         DataColumn(label: Text('Posts')),
@@ -254,8 +260,7 @@ class _UserState extends State<User> {
                                 DataCell(buildActionButton('Education Level', user['username'] ?? '')),
                                 DataCell(buildActionButton('Work Experience', user['username'] ?? '')),
                                 DataCell(buildActionButton('User Applications', user['username'] ?? '')),
-                                DataCell(buildActionButton('Add', user['username'] ?? '')),
-                                DataCell(buildActionButton('Update', user['username'] ?? '')),
+                                DataCell(buildUpdateButton( user['email'] ?? '')),
                                 DataCell(buildActionButton('Delete', user['username'] ?? '')),
                                 DataCell(buildActionButton('Posts', user['username'] ?? '')),
                               ],
@@ -276,6 +281,15 @@ class _UserState extends State<User> {
                 ],
               ),
             ),
+    );
+  }
+
+    Widget buildUpdateButton( String email) {
+    return ElevatedButton(
+      onPressed: () {
+        userController.goToProfileSettingsPgae(email);
+      },
+      child: Text("Update"),
     );
   }
 
@@ -309,14 +323,11 @@ class _UserState extends State<User> {
             print('Clicked $action for username: $username');
             // Add your logic for 'User Applications' action
             break;
-          case 'Update':
-            // Handle 'Update' action
-            print('Clicked $action for username: $username');
-            // Add your logic for 'Update' action
-            break;
+         
           case 'Delete':
-            // Handle 'Delete' action
+            userController.Confirmation(username);
             print('Clicked $action for username: $username');
+            fetchData();
             // Add your logic for 'Delete' action
             break;
           case 'Posts':

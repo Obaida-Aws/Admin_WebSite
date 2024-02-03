@@ -34,6 +34,8 @@ class ReportPagesController extends GetxController {
 
       // Clear existing data
       reportPagesData.clear();
+      print("hhhhhhhhhhhh");
+      print(responseBody);
 
       // Iterate over the reported pages and transform the data
       for (var reportedPage in responseBody['reportedPage']) {
@@ -41,6 +43,7 @@ class ReportPagesController extends GetxController {
           'reportId': reportedPage['id'].toString(),
           'pageName': reportedPage['pageId'],
           'reason': reportedPage['text'],
+          'username': reportedPage['username'],
         };
         reportPagesData.add(transformedData);
       }

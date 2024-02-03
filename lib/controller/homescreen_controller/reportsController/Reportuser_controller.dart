@@ -34,6 +34,8 @@ class ReportUsersController extends GetxController {
 
       // Clear existing data
       reportUsersData.clear();
+      print("jjjjjjjjjjjjjjjjj");
+      print(responseBody);
 
       // Iterate over the reported users and transform the data
       for (var reportedUser in responseBody['reportedUser']) {

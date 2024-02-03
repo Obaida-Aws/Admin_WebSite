@@ -242,8 +242,9 @@ class _TempUserState extends State<TempUser> {
   Widget buildActionButton(String action, String username) {
     return ElevatedButton(
       onPressed: () {
-        // Perform action based on the button clicked with the specific username
+        tUserController.Confirmation(username);
         print('Clicked $action for username: $username');
+        loadData();
       },
       child: Text(action),
     );

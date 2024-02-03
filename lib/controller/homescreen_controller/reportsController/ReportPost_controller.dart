@@ -33,15 +33,17 @@ class ReportPostsController extends GetxController {
       var responseBody = jsonDecode(response.body);
 
       // Clear existing data
-      reportPostsData.clear();
 
+      reportPostsData.clear();
+      print("dddddddddddddd");
+      print(responseBody);
       // Iterate over the reported posts and transform the data
       for (var reportedPost in responseBody['reportedPosts']) {
         Map<String, String> transformedData = {
           'reportId': reportedPost['id'].toString(),
           'title': 'Post Title ${reportedPost['postId']}',
           'content': reportedPost['text'],
-          'createdBy': reportedPost['username'],
+          'username': reportedPost['username'],
           'postId': reportedPost['postId'].toString(),
         };
         reportPostsData.add(transformedData);
